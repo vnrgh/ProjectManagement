@@ -10,30 +10,29 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
     public EmployeeService (EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
-    public Employee getEmployeeById(int id) {
+    public Employee getEmployeeById(long id) {
         return employeeRepository.getEmployeeById(id).orElseThrow(() -> new EmployeeNotFoundException("account with id " + id + " was not found"));
     }
 
     public List<Employee> getAllEmployees() {
-        return employeeRepository.getAllEmployees().orElseThrow(() -> new EmployeeNotFoundException("no employee was found"));
+        return employeeRepository.getAllEmployees();
     }
 
-//    public Employee createEmployee(Employee employee) {
-//        return employeeRepository.save(employee);
-//    }
-
-
-
-    public List<Employee> findBiggestSalary(List<Employee> employees, double salary) {
-        return employees.stream()
-                .filter(e -> e.getSalary() > salary)
-                .toList();
+    public Long createEmployee(Employee employee) {
+        return employeeRepository.createEmployee(employee);
     }
 
+    public void deleteEmployeeById(Long id) {
+        employeeRepository.deleteEmployeeById(id);
+    }
+
+    public void updateEmployeeById(Long id, Employee employee) {
+        employeeRepository.updateEmployeeById(id, employee);
+    }
 }
