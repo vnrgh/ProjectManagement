@@ -37,8 +37,8 @@ public class AppConfig {
         properties.put("org.hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
         properties.put("hibernate.default_schema", environment.getRequiredProperty("hibernate.default_schema"));
         properties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
-        properties.put("hibernate.show.sql", environment.getRequiredProperty("hibernate.show.sql"));
-        properties.put("hibernate.format.sql", environment.getRequiredProperty("hibernate.format.sql"));
+        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+        properties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
         properties.put("hibernate.allow_update_outside_transaction", environment.getRequiredProperty("hibernate.allow_update_outside_transaction"));
         return properties;
     }

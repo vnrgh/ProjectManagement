@@ -2,7 +2,7 @@ package example.spring.repository;
 
 import example.spring.model.Employee;
 
-
+import example.spring.model.EmployeeDescription;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -19,10 +19,21 @@ public class EmployeeRepository {
         this.sessionFactory = sessionFactory;
     }
 
+
+    public Long createEmployee(Employee employee) {
+        try (Session session = sessionFactory.openSession()) {
+            return (Long) session.save(employee);
+        }
+    }
+
     public Optional<Employee> getEmployeeById(long id) {
         Employee employee;
         try (Session session = sessionFactory.openSession()) {
             employee = session.get(Employee.class, id);
+            EmployeeDescription description = new EmployeeDescription(employee.getId(), employee.toString(), employee);
+
+            session.save(description);
+            session.flush();
         }
         return Optional.ofNullable(employee);
     }
@@ -37,24 +48,10 @@ public class EmployeeRepository {
         return employees;
     }
 
-    public Long createEmployee(Employee employee) {
-        try (Session session = sessionFactory.openSession()) {
-            return (Long) session.save(employee);
-        }
-    }
-
-    public void deleteEmployeeById(Long id) {
-        try (Session session = sessionFactory.openSession()) {
-            Employee employee = session.load(Employee.class, id);
-            session.delete(employee);
-            session.flush();
-        }
-    }
-
     public void updateEmployeeById(Long id, Employee employee) {
         try (Session session = sessionFactory.openSession()) {
             Employee employee1 = session.get(Employee.class, id);
-            session.beginTransaction(); // Начало транзакции
+            session.beginTransaction();
 
             employee1.setAge(employee.getAge());
             employee1.setSkill(employee.getSkill());
@@ -64,6 +61,14 @@ public class EmployeeRepository {
 
             session.update(employee1);
             session.getTransaction().commit();
+        }
+    }
+
+    public void deleteEmployeeById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Employee employee = session.load(Employee.class, id);
+            session.delete(employee);
+            session.flush();
         }
     }
 }

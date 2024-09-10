@@ -17,7 +17,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable long id) {
+    public Employee getEmployeeById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 
@@ -33,13 +33,13 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployeeById(@PathVariable long id) {
+    public ResponseEntity<String> deleteEmployeeById(@PathVariable Long id) {
         employeeService.deleteEmployeeById(id);
         return new ResponseEntity<>("Employee was successfully deleted", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateEmployeeById(@PathVariable long id, @RequestBody Employee employee) {
+    public ResponseEntity<String> updateEmployeeById(@PathVariable Long id, @RequestBody Employee employee) {
         employeeService.updateEmployeeById(id, employee);
         return new ResponseEntity<>("Employee with id " + id + " was successfully updated", HttpStatus.OK);
     }
