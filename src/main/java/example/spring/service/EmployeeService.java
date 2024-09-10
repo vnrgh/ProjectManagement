@@ -16,7 +16,7 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Employee getEmployeeById(long id) {
+    public Employee getEmployeeById(Long id) {
         return employeeRepository.getEmployeeById(id).orElseThrow(() -> new EmployeeNotFoundException("account with id " + id + " was not found"));
     }
 
