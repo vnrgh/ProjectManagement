@@ -2,7 +2,6 @@ package example.spring.repository;
 
 import example.spring.model.Employee;
 
-import example.spring.model.EmployeeDescription;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -30,9 +29,6 @@ public class EmployeeRepository {
         Employee employee;
         try (Session session = sessionFactory.openSession()) {
             employee = session.get(Employee.class, id);
-            EmployeeDescription description = new EmployeeDescription(employee.getId(), employee.toString(), employee);
-
-            session.save(description);
             session.flush();
         }
         return Optional.ofNullable(employee);
