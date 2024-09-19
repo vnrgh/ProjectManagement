@@ -1,13 +1,11 @@
 package example.spring.controller;
 
 import example.spring.model.Project;
+import example.spring.model.dto.ProjectDTO;
 import example.spring.service.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/project")
@@ -19,8 +17,14 @@ public class ProjectController {
     }
 
     @PostMapping
-    private ResponseEntity<Long> createProject(@RequestBody Project project) {
-        Long id = projectService.createProject(project);
+    private ResponseEntity<Long> createProject(@RequestBody ProjectDTO projectDTO) {
+        Long id = projectService.createProject(projectDTO);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}")
+    private Project getProjectById(@PathVariable Long id) {
+        return projectService.getProjectById(id);
+    }
+
 }

@@ -1,11 +1,13 @@
 package example.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,4 +22,11 @@ public class Project {
     private Long id;
     private String projectName;
     private String projectDescription;
+
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "project_technology",
+    joinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "project_id")} ,
+    inverseJoinColumns = {@JoinColumn(name = "technology_id", referencedColumnName = "technology_id")})
+    private List<Technology> technologies;
 }
