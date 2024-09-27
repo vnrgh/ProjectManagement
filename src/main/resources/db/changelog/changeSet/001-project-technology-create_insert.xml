@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1" author="any_author">
+        <createTable tableName="projects">
+            <column autoIncrement="true" name="project_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_projects"/>
+            </column>
+            <column name="project_description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+
+    <changeSet id="2" author="any_author">
+        <createTable tableName="technologies">
+            <column autoIncrement="true" name="technology_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_technologies"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="3" author="any_author">
+        <createTable tableName="project_technology">
+            <column name="project_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="technology_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+        <addForeignKeyConstraint
+                baseTableName="project_technology"
+                baseColumnNames="project_id"
+                referencedTableName="projects"
+                referencedColumnNames="project_id"
+                constraintName="fk_project_technology_project"/>
+
+        <addForeignKeyConstraint
+                baseTableName="project_technology"
+                baseColumnNames="technology_id"
+                referencedTableName="technologies"
+                referencedColumnNames="technology_id"
+                constraintName="fk_project_technology_technology"/>
+    </changeSet>
+
+<!--    <changeSet id="3" author="any_author">-->
+<!--        <createTable tableName="project_technology">-->
+<!--            <column name="project_id" type="BIGINT">-->
+<!--                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_project_technology"/>-->
+<!--            </column>-->
+<!--            <column name="technology_id" type="BIGINT">-->
+<!--                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_project_technology"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+    
+    <changeSet id="4" author="any_author">
+        <createTable tableName="employees" schemaName="management">
+            <column autoIncrement="true" name="employee_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_employees"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="age" type="INTEGER"/>
+            <column name="salary" type="DOUBLE PRECISION"/>
+            <column name="skill" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="any_author">
+        <createTable tableName="tasks">
+            <column autoIncrement="true" name="task_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tasks"/>
+            </column>
+            <column name="task_description" type="VARCHAR(255)"/>
+            <column name="difficulty" type="VARCHAR(255)"/>
+            <column name="deadline" type="VARCHAR(255)"/>
+            <column name="project_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Добавляем внешний ключ к таблице projects -->
+        <addForeignKeyConstraint baseTableName="tasks"
+                                 baseColumnNames="project_id"
+                                 referencedTableName="projects"
+                                 referencedColumnNames="project_id"
+                                 constraintName="fk_task_project"/>
+
+    </changeSet>
+
+
+    <!--    <changeSet id="100" author="any_author">-->
+<!--        <loadData tableName="employees" file="db/changelog/changeSet/employees.csv"/>-->
+<!--    </changeSet>-->
+</databaseChangeLog>

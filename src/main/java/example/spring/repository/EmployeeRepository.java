@@ -21,7 +21,10 @@ public class EmployeeRepository {
 
     public Long createEmployee(Employee employee) {
         try (Session session = sessionFactory.openSession()) {
-            return (Long) session.save(employee);
+            session.beginTransaction();
+            Long id = (Long) session.save(employee);
+            session.getTransaction().commit();
+            return id;
         }
     }
 

@@ -1,5 +1,6 @@
 package example.spring.configuration;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +40,7 @@ public class AppConfig {
         properties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
         properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
         properties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
-        properties.put("hibernate.allow_update_outside_transaction", environment.getRequiredProperty("hibernate.allow_update_outside_transaction"));
+//        properties.put("hibernate.allow_update_outside_transaction", environment.getRequiredProperty("hibernate.allow_update_outside_transaction"));
         return properties;
     }
 
@@ -51,5 +52,14 @@ public class AppConfig {
         dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
         return dataSource;
+    }
+
+    @Bean
+    public SpringLiquibase liquibase() {
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setDataSource(dataSource());
+        liquibase.setChangeLog("db/changelog/changelog.xml");
+        liquibase.setDefaultSchema("management");
+        return liquibase;
     }
 }
