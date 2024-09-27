@@ -16,6 +16,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
     private Long id;
+    @Column(name = "task_description")
     private String taskDescription;
 
     @Enumerated(EnumType.STRING)
@@ -23,6 +24,6 @@ public class Task {
     private String deadline;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 }

@@ -21,8 +21,4 @@ public class Technology {
     @Column(name = "technology_id")
     private Long id;
     private String name;
-
-//    @JsonIgnore
-//    @ManyToMany(mappedBy = "technologies")
-//    private List<Project> projects;
 }

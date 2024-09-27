@@ -27,7 +27,12 @@ create type skill_type as enum (
     'LOW',
     'MID',
     'HIGH'
-    )
+    );
+DELETE FROM management.DATABASECHANGELOG WHERE id='1' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='2' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='3' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='4' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='5' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
+SELECT * FROM management.employees;
 
-
-
+insert into management.employees("firstName", "lastName", age, salary, skill) values ('John', 'Wick', 33, 200.0, 'JUNIOR');

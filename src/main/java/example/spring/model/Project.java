@@ -20,7 +20,9 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id")
     private Long id;
+    @Column(name = "project_name")
     private String projectName;
+    @Column(name = "project_description")
     private String projectDescription;
 
     @JsonIgnore
@@ -28,5 +30,6 @@ public class Project {
     @JoinTable(name = "project_technology",
     joinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "project_id")} ,
     inverseJoinColumns = {@JoinColumn(name = "technology_id", referencedColumnName = "technology_id")})
+
     private List<Technology> technologies;
 }
