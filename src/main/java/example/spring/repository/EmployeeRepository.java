@@ -31,8 +31,10 @@ public class EmployeeRepository {
     public Optional<Employee> getEmployeeById(long id) {
         Employee employee;
         try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             employee = session.get(Employee.class, id);
             session.flush();
+            session.getTransaction().commit();
         }
         return Optional.ofNullable(employee);
     }
@@ -65,9 +67,11 @@ public class EmployeeRepository {
 
     public void deleteEmployeeById(Long id) {
         try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             Employee employee = session.load(Employee.class, id);
             session.delete(employee);
             session.flush();
+            session.getTransaction().commit();
         }
     }
 }

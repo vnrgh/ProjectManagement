@@ -5,16 +5,10 @@ import example.spring.model.Technology;
 import example.spring.model.dto.ProjectDTO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class ProjectRepository {
@@ -45,9 +39,11 @@ public class ProjectRepository {
     public Optional<Project> getProjectById(long id) {
         Project project;
         try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             project = session.get(Project.class, id);
             System.out.println(project.getTechnologies());
             session.flush();
+            session.getTransaction().commit();
         }
         return Optional.ofNullable(project);
     }

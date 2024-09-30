@@ -24,8 +24,10 @@ public class TechnologyRepository {
     public Optional<Technology> getTechnologyById(Long id) {
         Technology technology;
         try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             technology = session.get(Technology.class, id);
             session.flush();
+            session.getTransaction().commit();
         }
         return Optional.ofNullable(technology);
     }

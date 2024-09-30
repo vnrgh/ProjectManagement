@@ -30,6 +30,5 @@ public class Project {
     @JoinTable(name = "project_technology",
     joinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "project_id")} ,
     inverseJoinColumns = {@JoinColumn(name = "technology_id", referencedColumnName = "technology_id")})
-
     private List<Technology> technologies;
 }

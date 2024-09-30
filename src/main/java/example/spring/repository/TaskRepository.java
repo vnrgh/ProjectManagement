@@ -39,8 +39,10 @@ public class TaskRepository {
     public Optional<Task> getTaskById(long id) {
         Task task;
         try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             task = session.get(Task.class, id);
             session.flush();
+            session.getTransaction().commit();
         }
         return Optional.ofNullable(task);
     }
@@ -74,9 +76,11 @@ public class TaskRepository {
 
     public void deleteTask(long id) {
         try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             Task task = session.load(Task.class, id);
             session.delete(task);
             session.flush();
+            session.getTransaction().commit();
         }
     }
 }
