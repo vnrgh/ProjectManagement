@@ -41,8 +41,8 @@ public class TaskController {
         return new ResponseEntity<>("Task with id " + id + " was successfully updated", HttpStatus.OK);
     }
 
-    @DeleteMapping
-    private ResponseEntity<String> deleteTask(long id) {
+    @DeleteMapping("/{id}")
+    private ResponseEntity<String> deleteTask(@PathVariable long id) {
         taskService.deleteTask(id);
         return new ResponseEntity<>("Task was successfully deleted", HttpStatus.OK);
     }
