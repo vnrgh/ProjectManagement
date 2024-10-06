@@ -1,5 +1,6 @@
 package example.spring.configuration;
 
+import example.spring.interceptor.CustomInterceptor;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,6 +10,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -17,11 +20,16 @@ import java.util.Properties;
 @ComponentScan(value = "example.spring")
 @EnableWebMvc
 @PropertySource("classpath:db.properties")
-public class AppConfig {
-    private Environment environment;
+public class AppConfig implements WebMvcConfigurer {
+    private final Environment environment;
 
     public AppConfig(Environment environment) {
         this.environment = environment;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new CustomInterceptor()).addPathPatterns("/**");
     }
 
     @Bean

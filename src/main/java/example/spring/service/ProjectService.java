@@ -1,10 +1,12 @@
 package example.spring.service;
 
-import example.spring.TaskNotFoundException;
+import example.spring.exception.ProjectNotFoundException;
 import example.spring.model.Project;
 import example.spring.model.dto.ProjectDTO;
 import example.spring.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProjectService {
@@ -19,7 +21,18 @@ public class ProjectService {
     }
 
     public Project getProjectById(Long id) {
-        //todo project not found exception
-        return projectRepository.getProjectById(id).orElseThrow(null);
+        return projectRepository.getProjectById(id).orElseThrow(() -> new ProjectNotFoundException("Project with id " + id + " was not found"));
+    }
+
+    public List<Project> getAllProjects() {
+        return projectRepository.getAllProjects();
+    }
+
+    public void updateProjectById(Long id, Project project) {
+        projectRepository.updateProjectById(id, project);
+    }
+
+    public void deleteProjectById(Long id) {
+        projectRepository.deleteProjectById(id);
     }
 }

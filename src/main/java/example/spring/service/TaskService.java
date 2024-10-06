@@ -1,13 +1,12 @@
 package example.spring.service;
 
-import example.spring.TaskNotFoundException;
+import example.spring.exception.TaskNotFoundException;
 import example.spring.model.Task;
 import example.spring.model.dto.TaskDTO;
 import example.spring.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskService {

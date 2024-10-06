@@ -33,7 +33,6 @@ public class EmployeeRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             employee = session.get(Employee.class, id);
-            session.flush();
             session.getTransaction().commit();
         }
         return Optional.ofNullable(employee);
@@ -60,7 +59,6 @@ public class EmployeeRepository {
             employee1.setFirstName(employee.getFirstName());
             employee1.setLastName(employee.getLastName());
 
-            session.update(employee1);
             session.getTransaction().commit();
         }
     }
@@ -70,7 +68,6 @@ public class EmployeeRepository {
             session.beginTransaction();
             Employee employee = session.load(Employee.class, id);
             session.delete(employee);
-            session.flush();
             session.getTransaction().commit();
         }
     }

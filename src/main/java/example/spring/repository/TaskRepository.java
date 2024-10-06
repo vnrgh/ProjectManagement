@@ -41,7 +41,6 @@ public class TaskRepository {
         try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             task = session.get(Task.class, id);
-            session.flush();
             session.getTransaction().commit();
         }
         return Optional.ofNullable(task);
@@ -69,7 +68,6 @@ public class TaskRepository {
             task1.setDeadline(task.getDeadline());
             task1.setDifficulty(task.getDifficulty());
 
-            session.update(task1);
             session.getTransaction().commit();
         }
     }
@@ -79,7 +77,6 @@ public class TaskRepository {
             session.beginTransaction();
             Task task = session.load(Task.class, id);
             session.delete(task);
-            session.flush();
             session.getTransaction().commit();
         }
     }
