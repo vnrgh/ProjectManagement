@@ -1,6 +1,6 @@
 package example.spring.service;
 
-import example.spring.EmployeeNotFoundException;
+import example.spring.exception.EmployeeNotFoundException;
 import example.spring.model.Employee;
 import example.spring.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class EmployeeService {
     }
 
     public Employee getEmployeeById(Long id) {
-        return employeeRepository.getEmployeeById(id).orElseThrow(() -> new EmployeeNotFoundException("account with id " + id + " was not found"));
+        return employeeRepository.getEmployeeById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee with id " + id + " was not found"));
     }
 
     public List<Employee> getAllEmployees() {

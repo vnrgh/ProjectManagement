@@ -42,10 +42,41 @@ public class ProjectRepository {
             session.beginTransaction();
             project = session.get(Project.class, id);
             System.out.println(project.getTechnologies());
-            session.flush();
             session.getTransaction().commit();
         }
-        return Optional.ofNullable(project);
+        return Optional.of(project);
+    }
+
+    public List<Project> getAllProjects() {
+        List<Project> projects = null;
+        try (Session session = sessionFactory.openSession()) {
+            projects = session.createQuery("from Project", Project.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return projects;
+    }
+
+    public void updateProjectById(Long id, Project project) {
+        try (Session session = sessionFactory.openSession()) {
+            Project project1 = session.get(Project.class, id);
+            session.beginTransaction();
+
+            project1.setProjectName(project.getProjectName());
+            project1.setTechnologies(project.getTechnologies());
+            project1.setProjectDescription(project.getProjectDescription());
+
+            session.getTransaction().commit();
+        }
+    }
+
+    public void deleteProjectById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Project project = session.load(Project.class, id);
+            session.delete(project);
+            session.getTransaction().commit();
+        }
     }
 
 }
