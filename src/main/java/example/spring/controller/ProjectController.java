@@ -30,7 +30,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    private List<Project> getAllProjects() {
+    private List<Project> getAllProtsjec() {
         return projectService.getAllProjects();
     }
 

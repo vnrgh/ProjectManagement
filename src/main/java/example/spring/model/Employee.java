@@ -25,4 +25,8 @@ public class Employee {
     private double salary;
     @Enumerated(EnumType.STRING)
     private Skill skill;
+
+    @OneToOne
+    @JoinColumn(name = "task_id")
+    private Task task;
 }

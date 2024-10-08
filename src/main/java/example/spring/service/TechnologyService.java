@@ -1,8 +1,8 @@
 package example.spring.service;
 
-import example.spring.exception.TaskNotFoundException;
 import example.spring.exception.TechnologyNotFoundException;
 import example.spring.model.Technology;
+import example.spring.model.dto.TechnologyDTO;
 import example.spring.repository.TechnologyRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +16,30 @@ public class TechnologyService {
         this.technologyRepository = technologyRepository;
     }
 
-    public Long createTechnology(Technology technology) {
-        return technologyRepository.createTechnology(technology);
+    public Long createTechnology(TechnologyDTO technologyDTO) {
+        Technology technology = Technology.builder()
+                .name(technologyDTO.getName())
+                .build();
+        return technologyRepository.save(technology).getId();
     }
 
     public Technology getTechnologyById(Long id) {
-        return technologyRepository.getTechnologyById(id).orElseThrow(() -> new TechnologyNotFoundException("Technology with id " + id + " was not found"));
+        return technologyRepository.findById(id).orElseThrow(() -> new TechnologyNotFoundException("Technology with id " + id + " not found"));
     }
 
     public List<Technology> getAllTechnologies() {
-        return technologyRepository.getAllTechnologies();
+        return technologyRepository.findAll();
     }
 
-    public void updateTechnologyById(Long id, Technology technology) {
-        technologyRepository.updateTechnologyById(id, technology);
+    public void updateTechnologyById(Long id, TechnologyDTO technologyDTO) {
+        Technology existingTechnology = technologyRepository.findById(id)
+                .orElseThrow(() -> new TechnologyNotFoundException("Technology with id " + id + " not found"));
+
+        existingTechnology.setName(technologyDTO.getName());
+        technologyRepository.save(existingTechnology);
     }
 
     public void deleteTechnologyById(Long id) {
-        technologyRepository.deleteTechnologyById(id);
+        technologyRepository.deleteById(id);
     }
 }

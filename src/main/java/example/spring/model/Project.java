@@ -26,7 +26,7 @@ public class Project {
     private String projectDescription;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "project_technology",
     joinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "project_id")} ,
     inverseJoinColumns = {@JoinColumn(name = "technology_id", referencedColumnName = "technology_id")})
