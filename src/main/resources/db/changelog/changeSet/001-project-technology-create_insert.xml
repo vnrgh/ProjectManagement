@@ -68,21 +68,8 @@
 <!--            </column>-->
 <!--        </createTable>-->
 <!--    </changeSet>-->
-    
-    <changeSet id="4" author="any_author">
-        <createTable tableName="employees" schemaName="management">
-            <column autoIncrement="true" name="employee_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_employees"/>
-            </column>
-            <column name="first_name" type="VARCHAR(255)"/>
-            <column name="last_name" type="VARCHAR(255)"/>
-            <column name="age" type="INTEGER"/>
-            <column name="salary" type="DOUBLE PRECISION"/>
-            <column name="skill" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
 
-    <changeSet id="5" author="any_author">
+    <changeSet id="4" author="any_author">
         <createTable tableName="tasks">
             <column autoIncrement="true" name="task_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tasks"/>
@@ -102,6 +89,26 @@
                                  referencedColumnNames="project_id"
                                  constraintName="fk_task_project"/>
 
+    </changeSet>
+
+    <changeSet id="5" author="any_author">
+        <createTable tableName="employees" schemaName="management">
+            <column autoIncrement="true" name="employee_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_employees"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="age" type="INTEGER"/>
+            <column name="salary" type="DOUBLE PRECISION"/>
+            <column name="skill" type="VARCHAR(255)"/>
+            <column name="task_id" type="BIGINT"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="employees"
+                                 baseColumnNames="task_id"
+                                 referencedTableName="tasks"
+                                 referencedColumnNames="task_id"
+                                 constraintName="fk_employee_task"/>
     </changeSet>
 
 

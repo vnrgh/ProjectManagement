@@ -1,11 +1,13 @@
 package example.spring.controller;
 
 import example.spring.model.Technology;
+import example.spring.model.dto.TechnologyDTO;
 import example.spring.service.TechnologyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,8 +20,8 @@ public class TechnologyController {
     }
 
     @PostMapping
-    private Long createTechnology(@RequestBody Technology technology) {
-        return technologyService.createTechnology(technology);
+    private Long createTechnology(@Valid @RequestBody TechnologyDTO technologyDTO) {
+        return technologyService.createTechnology(technologyDTO);
     }
 
     @GetMapping("/{id}")
@@ -33,8 +35,8 @@ public class TechnologyController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<String> updateTechnologyById(@PathVariable Long id, @RequestBody Technology technology) {
-        technologyService.updateTechnologyById(id, technology);
+    private ResponseEntity<String> updateTechnologyById(@PathVariable Long id, @RequestBody TechnologyDTO technologyDTO) {
+        technologyService.updateTechnologyById(id, technologyDTO);
         return new ResponseEntity<>("Technology with id " + id + " was updated", HttpStatus.OK);
     }
 

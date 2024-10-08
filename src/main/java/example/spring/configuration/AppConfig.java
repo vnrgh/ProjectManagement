@@ -1,14 +1,16 @@
 package example.spring.configuration;
 
 import example.spring.interceptor.CustomInterceptor;
-import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,6 +22,8 @@ import java.util.Properties;
 @ComponentScan(value = "example.spring")
 @EnableWebMvc
 @PropertySource("classpath:db.properties")
+@EnableJpaRepositories(value = "example.spring")
+@EnableTransactionManagement
 public class AppConfig implements WebMvcConfigurer {
     private final Environment environment;
 
@@ -33,7 +37,7 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
+    public LocalSessionFactoryBean entityManagerFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setHibernateProperties(hibernateProperties());
@@ -63,11 +67,19 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public SpringLiquibase liquibase() {
-        SpringLiquibase liquibase = new SpringLiquibase();
-        liquibase.setDataSource(dataSource());
-        liquibase.setChangeLog("db/changelog/changelog.xml");
-        liquibase.setDefaultSchema("management");
-        return liquibase;
+    public HibernateTransactionManager transactionManager() {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(entityManagerFactory().getObject());
+        transactionManager.setDataSource(dataSource());
+        return transactionManager;
     }
+
+//    @Bean
+//    public SpringLiquibase liquibase() {
+//        SpringLiquibase liquibase = new SpringLiquibase();
+//        liquibase.setDataSource(dataSource());
+//        liquibase.setChangeLog("db/changelog/changelog.xml");
+//        liquibase.setDefaultSchema("management");
+//        return liquibase;
+//    }
 }

@@ -1,6 +1,7 @@
 package example.spring.controller;
 
 import example.spring.model.Employee;
+import example.spring.model.dto.EmployeeDTO;
 import example.spring.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,8 @@ public class EmployeeController {
     }
 
     @PostMapping()
-    public ResponseEntity<Long> createEmployee(@RequestBody Employee employee) {
-        Long result = employeeService.createEmployee(employee);
+    public ResponseEntity<Long> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        Long result = employeeService.createEmployee(employeeDTO);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
@@ -39,8 +40,8 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateEmployeeById(@PathVariable Long id, @RequestBody Employee employee) {
-        employeeService.updateEmployeeById(id, employee);
+    public ResponseEntity<String> updateEmployeeById(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+        employeeService.updateEmployeeById(id, employeeDTO);
         return new ResponseEntity<>("Employee with id " + id + " was successfully updated", HttpStatus.OK);
     }
 }

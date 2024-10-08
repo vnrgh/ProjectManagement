@@ -20,8 +20,8 @@ public class TaskController {
     }
 
     @PostMapping
-    private ResponseEntity<Long> createTask(@RequestBody TaskDTO task) {
-        Long id = taskService.createTask(task);
+    private ResponseEntity<Long> createTask(@RequestBody TaskDTO taskDTO) {
+        Long id = taskService.createTask(taskDTO);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
@@ -36,8 +36,8 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<String> updateTask(@PathVariable long id, @RequestBody Task task) {
-        taskService.updateTask(id, task);
+    private ResponseEntity<String> updateTask(@PathVariable long id, @RequestBody TaskDTO taskDTO) {
+        taskService.updateTask(id, taskDTO);
         return new ResponseEntity<>("Task with id " + id + " was successfully updated", HttpStatus.OK);
     }
 
