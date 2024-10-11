@@ -3,9 +3,11 @@ package example.spring.service;
 import example.spring.exception.EmployeeNotFoundException;
 import example.spring.model.Employee;
 import example.spring.model.Task;
+import example.spring.model.User;
 import example.spring.model.dto.EmployeeDTO;
 import example.spring.repository.EmployeeRepository;
 import example.spring.repository.TaskRepository;
+import example.spring.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class EmployeeService {
 
     public Long createEmployee(EmployeeDTO employeeDTO) {
         Task task = taskRepository.findById(employeeDTO.getTaskId())
-                .orElseThrow(() -> new EmployeeNotFoundException("Task with id " + employeeDTO.getTaskId() + " was not found"));;
+                .orElseThrow(() -> new EmployeeNotFoundException("Task with id " + employeeDTO.getTaskId() + " was not found"));
 
         Employee employee = Employee.builder()
                 .firstName(employeeDTO.getFirstName())
