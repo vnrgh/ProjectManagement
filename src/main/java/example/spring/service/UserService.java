@@ -8,13 +8,17 @@ import example.spring.model.dto.UserDTO;
 import example.spring.repository.EmployeeRepository;
 import example.spring.repository.RoleRepository;
 import example.spring.repository.UserRepository;
+import example.spring.security.model.UserDetailsImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final EmployeeRepository employeeRepository;
@@ -26,7 +30,7 @@ public class UserService {
     }
 
     public Long createUser(UserDTO userDTO) {
-        Role role = roleRepository.findByName("CLIENT");
+        Role role = roleRepository.findByName("EMPLOYEE");
 
         Employee employee = employeeRepository.findById(userDTO.getEmployeeId())
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee with id " + userDTO.getEmployeeId() + " was not found"));
@@ -41,37 +45,38 @@ public class UserService {
         return userRepository.save(user).getId();
     }
 
-//    @Transactional
-//    public Long createUser(UserDTO userDTO) {
-//        // Находим роль "CLIENT"
-//        Role role = roleRepository.findByName("CLIENT");
-//
-//        // Создаем сотрудника, не загружая полностью Employee, только с его ID
-//        Employee employee = new Employee();
-//        employee.setId(userDTO.getEmployeeId());
-////        employeeRepository.getOne(userDTO.getEmployeeId());
-//
-//        // Создаем пользователя
-//        User user = User.builder()
-//                .username(userDTO.getUsername())
-//                .password(userDTO.getPassword())
-//                .email(userDTO.getEmail())
-//                .roles(List.of(role))
-//                .employee(employee)  // Присваиваем только ссылку на сотрудника по ID
-//                .build();
-//
-//        return userRepository.save(user).getId();
-//    }
-
-
     public User getUserById(Long id) {
-        // TODO UserNotFoundException
-        return userRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("User not found"));
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(this::convertToUserDTO)
+                .collect(Collectors.toList());
     }
 
-    // TODO может доделать апдейт и делет
+    @Override
+    public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EmployeeNotFoundException("User not found"));
+        List<Role> roles = user.getRoles();
+        List<SimpleGrantedAuthority> authorities = roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .toList();
+        return new UserDetailsImpl(user.getUsername(), user.getPassword(), authorities);
+    }
+
+    public UserDTO convertToUserDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setEmail(user.getEmail());
+
+        if (user.getEmployee() != null) {
+            userDTO.setEmployeeId(user.getEmployee().getId());
+        }
+
+        return userDTO;
+    }
 }

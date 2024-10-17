@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -20,13 +21,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    private User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        UserDTO userDTO = userService.convertToUserDTO(user);
+        return ResponseEntity.ok(userDTO);
     }
 
     @GetMapping
-    private List<User> getAllUsers() {
-        return userService.getAllUsers();
+    private List<UserDTO> getAllUsers() {
+        List<UserDTO> userDTOs = userService.getAllUsers();
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK).getBody();
     }
 
     @PostMapping
