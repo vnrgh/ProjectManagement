@@ -28,11 +28,19 @@ create type skill_type as enum (
     'MID',
     'HIGH'
     );
-DELETE FROM management.DATABASECHANGELOG WHERE id='1' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
-DELETE FROM management.DATABASECHANGELOG WHERE id='2' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
-DELETE FROM management.DATABASECHANGELOG WHERE id='3' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
-DELETE FROM management.DATABASECHANGELOG WHERE id='4' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
-DELETE FROM management.DATABASECHANGELOG WHERE id='5' AND author='any_author' AND filename='db/changelog/changeSet/001-project-technology-create_insert.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='1' AND author='any_author' AND filename='db/changelog/changeSet/001-tables-initialization.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='2' AND author='any_author' AND filename='db/changelog/changeSet/001-tables-initialization.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='3' AND author='any_author' AND filename='db/changelog/changeSet/001-tables-initialization.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='4' AND author='any_author' AND filename='db/changelog/changeSet/001-tables-initialization.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='5' AND author='any_author' AND filename='db/changelog/changeSet/001-tables-initialization.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='5' AND author='any_author' AND filename='db/changelog/changeSet/001-tables-initialization.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='6' AND author='any_author' AND filename='db/changelog/changeSet/001-tables-initialization.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='7' AND author='any_author' AND filename='db/changelog/changeSet/001-tables-initialization.xml';
+DELETE FROM management.DATABASECHANGELOG WHERE id='8' AND author='any_author' AND filename='db/changelog/changeSet/001-tables-initialization.xml';
+
 SELECT * FROM management.employees;
+
+DROP TABLE IF EXISTS management.projects;
+
 
 insert into management.employees("firstName", "lastName", age, salary, skill) values ('John', 'Wick', 33, 200.0, 'JUNIOR');
