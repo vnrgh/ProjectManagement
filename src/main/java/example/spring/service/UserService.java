@@ -76,7 +76,6 @@ public class UserService implements UserDetailsService {
         if (user.getEmployee() != null) {
             userDTO.setEmployeeId(user.getEmployee().getId());
         }
-
         return userDTO;
     }
 }

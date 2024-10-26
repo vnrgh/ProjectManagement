@@ -2,7 +2,7 @@ package example.spring.model.dto;
 
 import lombok.*;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 import java.util.List;
 
 @Data

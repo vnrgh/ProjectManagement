@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Date;
