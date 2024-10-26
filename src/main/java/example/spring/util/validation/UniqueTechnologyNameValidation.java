@@ -2,8 +2,8 @@ package example.spring.util.validation;
 
 import example.spring.repository.TechnologyRepository;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class UniqueTechnologyNameValidation implements ConstraintValidator<UniqueTechnologyName, String> {
     private final TechnologyRepository technologyRepository;
