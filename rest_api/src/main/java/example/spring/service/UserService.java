@@ -1,5 +1,6 @@
 package example.spring.service;
 
+import example.logger.aspect.Loggable;
 import example.spring.exception.EmployeeNotFoundException;
 import example.spring.model.Employee;
 import example.spring.model.Role;
@@ -45,6 +46,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user).getId();
     }
 
+    @Loggable
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
