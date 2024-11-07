@@ -5,10 +5,12 @@ import example.spring.model.dto.UserDTO;
 import example.spring.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -31,11 +33,5 @@ public class UserController {
     private List<UserDTO> getAllUsers() {
         List<UserDTO> userDTOs = userService.getAllUsers();
         return new ResponseEntity<>(userDTOs, HttpStatus.OK).getBody();
-    }
-
-    @PostMapping
-    private ResponseEntity<Long> createUser(@RequestBody UserDTO userDTO) {
-        Long id = userService.createUser(userDTO);
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 }

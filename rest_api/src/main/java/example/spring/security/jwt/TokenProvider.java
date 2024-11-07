@@ -27,12 +27,12 @@ public class TokenProvider {
     @Value("${jwt.token.expireTime}")
     private long expireTime;
 
-    public String createToken(UserDetailsImpl user) {
+    public String createToken(Authentication authenticate) {
         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         return JWT.create()
-                .withSubject(user.getUsername())
+                .withSubject(authenticate.getName())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expireTime))
-                .withClaim("roles", getRoleNamesFromAuthorities(user))
+                .withClaim("roles", getRoleNamesFromAuthorities(authenticate))
                 .sign(algorithm);
     }
 
@@ -43,8 +43,8 @@ public class TokenProvider {
         return verifier.verify(token);
     }
 
-    public List<String> getRoleNamesFromAuthorities(UserDetailsImpl user) {
-        return user.getAuthorities().stream()
+    public List<String> getRoleNamesFromAuthorities(Authentication authenticate) {
+        return authenticate.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
     }
