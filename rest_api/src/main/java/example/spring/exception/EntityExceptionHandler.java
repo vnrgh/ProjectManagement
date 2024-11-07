@@ -1,20 +1,18 @@
 package example.spring.exception;
 
-import org.springframework.http.HttpHeaders;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class EntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleAllExceptions(Exception ex) {
@@ -36,24 +34,19 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(TechnologyNotFoundException.class)
-    public ResponseEntity<String> handleTechnologyNotFoundException(TechnologyNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest request) {
-        List<String> exceptions = new ArrayList<>();
-        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            String[] description = {fieldError.getField(), fieldError.getDefaultMessage()};
-            exceptions.add(String.join(" ", description));
-        }
-        return new ResponseEntity<>(exceptions, status);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public ResponseEntity<List> responseEntityExceptionHandler(final MethodArgumentNotValidException ex) {
+
+        List list = ex.getBindingResult().getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
     }
 }

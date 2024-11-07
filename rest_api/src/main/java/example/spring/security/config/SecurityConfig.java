@@ -18,6 +18,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    public static final String SIGNIN_ENDPOINT = "/auth/signin";
+    public static final String SIGNUP_ENDPOINT = "/auth/signup";
+
+    private static final String[] AUTH_WHITELIST = {
+            // -- Swagger UI v2
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            // Swagger UI v3 (OpenAPI)
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            // Auth end points
+            SIGNIN_ENDPOINT,
+            SIGNUP_ENDPOINT
+    };
+
     private final UserDetailsService userDetailsService;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
@@ -33,7 +54,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/**").hasAnyAuthority("EMPLOYEE", "ADMIN")
-                        .requestMatchers("/auth/signin", "/auth/signup").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 

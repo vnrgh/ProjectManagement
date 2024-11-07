@@ -3,6 +3,7 @@ package example.spring.controller;
 import example.spring.model.Employee;
 import example.spring.model.dto.EmployeeDTO;
 import example.spring.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

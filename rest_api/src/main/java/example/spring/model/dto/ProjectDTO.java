@@ -11,5 +11,4 @@ import java.util.List;
 public class ProjectDTO {
     private String projectName;
     private String projectDescription;
-    private List<Long> technologyId;
 }

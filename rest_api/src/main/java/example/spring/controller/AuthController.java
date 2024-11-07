@@ -1,9 +1,14 @@
 package example.spring.controller;
 
 import example.spring.model.dto.SignInRequestDTO;
+import example.spring.model.dto.SignInResponseDTO;
+import example.spring.model.dto.UserDTO;
 import example.spring.security.jwt.TokenProvider;
 import example.spring.security.model.UserDetailsImpl;
+import example.spring.service.AuthService;
 import example.spring.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,30 +25,20 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private final AuthenticationProvider authenticationProvider;
-    private final UserService userService;
-    private final TokenProvider tokenProvider;
+    private final AuthService authService;
 
-    public AuthController(AuthenticationProvider authenticationProvider, UserService userService, TokenProvider tokenProvider) {
-        this.authenticationProvider = authenticationProvider;
-        this.userService = userService;
-        this.tokenProvider = tokenProvider;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    @PostMapping("/signup")
+    private ResponseEntity<Long> signup(@Valid @RequestBody UserDTO userDTO) {
+        Long id = authService.signup(userDTO);
+        return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")
-    private ResponseEntity signIn(@RequestBody SignInRequestDTO requestDTO) {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(requestDTO.getUsername(), requestDTO.getPassword());
-        try {
-            authenticationProvider.authenticate(usernamePasswordAuthenticationToken);
-            UserDetailsImpl userDetails = userService.loadUserByUsername(requestDTO.getUsername());
-            String token = tokenProvider.createToken(userDetails);
-            Map<String, String> response = new HashMap<>();
-            response.put("auth_token", token);
-            return ResponseEntity.ok(response);
-        } catch (AuthenticationException authenticationException) {
-            throw new BadCredentialsException("Invalid username or password");
-        }
-
+    private ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInRequestDTO requestDTO) {
+        return new ResponseEntity<>(authService.signin(requestDTO), HttpStatus.OK);
     }
 }

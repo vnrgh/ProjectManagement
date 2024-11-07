@@ -25,7 +25,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getRequestURI().equals("/auth/signin") ||
-                request.getRequestURI().equals("/auth/signup")) {
+                request.getRequestURI().equals("/auth/signup") ||
+                request.getServletPath().contains("swagger") ||
+                request.getServletPath().contains("v3")) {
             filterChain.doFilter(request, response);
         } else {
             try {

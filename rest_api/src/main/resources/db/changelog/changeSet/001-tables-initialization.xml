@@ -20,43 +20,6 @@
     </changeSet>
 
     <changeSet id="2" author="any_author">
-        <createTable tableName="technologies">
-            <column autoIncrement="true" name="technology_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_technologies"/>
-            </column>
-            <column name="name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    
-    <changeSet id="3" author="any_author">
-        <createTable tableName="project_technology">
-            <column name="project_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="technology_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-
-        <addForeignKeyConstraint
-                baseTableName="project_technology"
-                baseColumnNames="project_id"
-                referencedTableName="projects"
-                referencedColumnNames="project_id"
-                constraintName="fk_project_technology_project"/>
-
-        <addForeignKeyConstraint
-                baseTableName="project_technology"
-                baseColumnNames="technology_id"
-                referencedTableName="technologies"
-                referencedColumnNames="technology_id"
-                constraintName="fk_project_technology_technology"/>
-    </changeSet>
-
-    <changeSet id="4" author="any_author">
         <createTable tableName="tasks">
             <column autoIncrement="true" name="task_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tasks"/>
@@ -77,8 +40,8 @@
 
     </changeSet>
 
-    <changeSet id="5" author="any_author">
-        <createTable tableName="employees" schemaName="management">
+    <changeSet id="3" author="any_author">
+        <createTable tableName="employees">
             <column autoIncrement="true" name="employee_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_employees"/>
             </column>
@@ -97,7 +60,7 @@
                                  constraintName="fk_employee_task"/>
     </changeSet>
 
-    <changeSet id="6" author="any_author">
+    <changeSet id="4" author="any_author">
         <createTable tableName="users">
             <column name="user_id" autoIncrement="true" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
@@ -115,7 +78,7 @@
                                  constraintName="fk_user_employee"/>
     </changeSet>
 
-    <changeSet id="7" author="any_author">
+    <changeSet id="5" author="any_author">
         <createTable tableName="roles">
             <column name="role_id" autoIncrement="true" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_roles"/>
@@ -124,7 +87,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="8" author="any_author">
+    <changeSet id="6" author="any_author">
         <createTable tableName="user_roles">
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false"/>
