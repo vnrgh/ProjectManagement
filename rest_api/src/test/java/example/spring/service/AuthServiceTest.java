@@ -2,13 +2,10 @@ package example.spring.service;
 
 import example.spring.model.dto.SignInRequestDTO;
 import example.spring.model.dto.SignInResponseDTO;
-import example.spring.security.jwt.TokenProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,11 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ActiveProfiles("test")
 class AuthServiceTest {
     @Autowired
-    AuthService authService;
-
-    @Autowired
-    TokenProvider tokenProvider;
-
+    private AuthService authService;
 
     @Test
     void signInTest() {

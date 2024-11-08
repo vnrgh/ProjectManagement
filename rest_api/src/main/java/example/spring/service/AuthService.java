@@ -33,7 +33,7 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(requestDTO.getUsername(), requestDTO.getPassword());
         try {
             Authentication authenticate = authenticationProvider.authenticate(usernamePasswordAuthenticationToken);
-            UserDetailsImpl userDetails = userService.loadUserByUsername(requestDTO.getUsername());
+            // UserDetailsImpl userDetails = userService.loadUserByUsername(requestDTO.getUsername());
             String token = tokenProvider.createToken(authenticate);
             return new SignInResponseDTO(token);
         } catch (AuthenticationException authenticationException) {
