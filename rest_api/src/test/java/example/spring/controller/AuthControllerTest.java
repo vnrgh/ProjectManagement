@@ -14,26 +14,29 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 
 @WebMvcTest(AuthControllerTest.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class AuthControllerTest {
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockBean
-    AuthService authService;
+    private AuthService authService;
 
     @MockBean
-    TokenProvider tokenProvider;
+    private TokenProvider tokenProvider;
 
     @BeforeEach
     void setUp() {
@@ -48,7 +51,7 @@ class AuthControllerTest {
         String jsonBody = mapper.writeValueAsString(signInRequestDTO);
         when(authService.signin(signInRequestDTO)).thenReturn(new SignInResponseDTO("test_token"));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/signin").content(jsonBody).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/auth/signin").content(jsonBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(result -> assertEquals(result.getResponse().getContentAsString(),
                         "{\"accessToken\":\"test_token\"}"
                         ))
@@ -59,17 +62,17 @@ class AuthControllerTest {
 
     @Test
     void signInExceptionTest() throws Exception {
-//        SignInRequestDTO signInRequestDTO = new SignInRequestDTO("admin", "password");
-//        ObjectMapper mapper = new ObjectMapper();
-//        String jsonBody = mapper.writeValueAsString(signInRequestDTO);
-//        when(authService.signin(signInRequestDTO)).thenReturn(new SignInResponseDTO("test_token"));
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/auth/signin").content(jsonBody).contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(result -> assertEquals(result.getResponse().getContentAsString(),
-//                        "{\"accessToken\":\"test_token\"}"
-//                ))
-//                .andExpect(result -> { assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
-//                })
-//                .andReturn();
+        ObjectMapper mapper = new ObjectMapper();
+        SignInRequestDTO signInRequestDTO = new SignInRequestDTO("invalidUser", "wrongPassword");
+
+        String jsonBody = mapper.writeValueAsString(signInRequestDTO);
+        when(authService.signin(signInRequestDTO)).thenThrow(new BadCredentialsException("Invalid username or password"));
+        mockMvc.perform(post("/auth/signin").content(jsonBody).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(result -> {
+                    assertEquals(result.getResponse().getStatus(), HttpStatus.BAD_REQUEST.value());
+                    assertInstanceOf(BadCredentialsException.class, result.getResolvedException());
+                    assertEquals("Invalid username or password", result.getResolvedException().getMessage());
+                })
+                .andReturn();
     }
 }
