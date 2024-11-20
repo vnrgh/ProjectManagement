@@ -22,9 +22,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider {
-    @Value("${jwt.token.secret}")
+//    @Value("${jwt.token.secret}")
+//    private String secret;
+//    @Value("${jwt.token.expireTime}")
+//    private long expireTime;
+
+    @Value("secret")
     private String secret;
-    @Value("${jwt.token.expireTime}")
+    @Value("600000")
     private long expireTime;
 
     public String createToken(Authentication authenticate) {

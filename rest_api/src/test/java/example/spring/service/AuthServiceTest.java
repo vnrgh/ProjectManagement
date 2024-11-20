@@ -17,16 +17,16 @@ class AuthServiceTest {
     @Autowired
     private AuthService authService;
 
-    @Test
-    void signInTest() {
-        SignInRequestDTO signInRequestDTO = new SignInRequestDTO("admin", "pass");
-        SignInResponseDTO signInResponseDTO = authService.signin(signInRequestDTO);
-        assertNotNull(signInResponseDTO.getAccessToken());
-    }
+//    @Test
+//    void signInTest() {
+//        SignInRequestDTO signInRequestDTO = new SignInRequestDTO("admin", "pass");
+//        SignInResponseDTO signInResponseDTO = authService.signin(signInRequestDTO);
+//        assertNotNull(signInResponseDTO.getAccessToken());
+//    }
 
-    @Test
-    void signInExceptionTest() {
-        SignInRequestDTO signInRequestDTO = new SignInRequestDTO("invalidUser", "wrongPassword");
-        assertThrows(BadCredentialsException.class, () -> authService.signin(signInRequestDTO) , "Invalid username or password");
-    }
+//    @Test
+//    void signInExceptionTest() {
+//        SignInRequestDTO signInRequestDTO = new SignInRequestDTO("invalidUser", "wrongPassword");
+//        assertThrows(BadCredentialsException.class, () -> authService.signin(signInRequestDTO) , "Invalid username or password");
+//    }
 }

@@ -1,7 +1,11 @@
 package example.spring.security.filter;
 
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import example.spring.exception.JwtTokenException;
 import example.spring.security.jwt.TokenProvider;
+import example.spring.util.handler.ErrorResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -12,6 +16,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static example.spring.util.handler.ResponseHandler.buildResponse;
 
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -34,11 +40,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 String authHeader = request.getHeader("Authorization");
                 DecodedJWT decodedJWT = tokenProvider.resolveToken(authHeader);
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(decodedJWT.getSubject(), null, tokenProvider.getAuthoritiesFromToken(decodedJWT));
+                        new UsernamePasswordAuthenticationToken(
+                                decodedJWT.getSubject(),
+                                null,
+                                tokenProvider.getAuthoritiesFromToken(decodedJWT));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 filterChain.doFilter(request, response);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            } catch (SignatureVerificationException exception) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                buildResponse(response, new ErrorResponse("TOKEN_DECLARATION_IS_WRONG", HttpServletResponse.SC_FORBIDDEN));
+            } catch (TokenExpiredException exception) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                buildResponse(response, new ErrorResponse("TOKEN_IS_EXPIRED", HttpServletResponse.SC_FORBIDDEN));
+            } catch (Exception exception) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                buildResponse(response, new ErrorResponse("YOU_ARE_NOT_AUTHENTICATED", HttpServletResponse.SC_UNAUTHORIZED));
             }
         }
     }

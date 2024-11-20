@@ -2,10 +2,12 @@ package example.spring.service;
 
 import example.logger.aspect.Loggable;
 import example.spring.exception.EmployeeNotFoundException;
+import example.spring.exception.UserNotFoundException;
 import example.spring.model.Employee;
 import example.spring.model.Role;
 import example.spring.model.User;
 import example.spring.model.dto.UserDTO;
+import example.spring.model.dto.UserResponseDTO;
 import example.spring.repository.EmployeeRepository;
 import example.spring.repository.RoleRepository;
 import example.spring.repository.UserRepository;
@@ -51,7 +53,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public List<UserDTO> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream()
                 .map(this::convertToUserDTO)
@@ -60,7 +62,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EmployeeNotFoundException("User not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
         List<Role> roles = user.getRoles();
         List<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
@@ -68,16 +70,15 @@ public class UserService implements UserDetailsService {
         return new UserDetailsImpl(user.getUsername(), user.getPassword(), authorities);
     }
 
-    public UserDTO convertToUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(user.getPassword());
-        userDTO.setEmail(user.getEmail());
+    public UserResponseDTO convertToUserDTO(User user) {
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setId(user.getId());
+        userResponseDTO.setUsername(user.getUsername());
+        userResponseDTO.setEmail(user.getEmail());
 
         if (user.getEmployee() != null) {
-            userDTO.setEmployeeId(user.getEmployee().getId());
+            userResponseDTO.setEmployeeId(user.getEmployee().getId());
         }
-        return userDTO;
+        return userResponseDTO;
     }
 }

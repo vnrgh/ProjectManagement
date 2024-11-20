@@ -13,7 +13,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "tasks", schema = "management")
+@Table(name = "tasks")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
