@@ -2,6 +2,7 @@ package example.spring.controller;
 
 import example.spring.model.User;
 import example.spring.model.dto.UserDTO;
+import example.spring.model.dto.UserResponseDTO;
 import example.spring.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +24,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        UserDTO userDTO = userService.convertToUserDTO(user);
-        return ResponseEntity.ok(userDTO);
+        UserResponseDTO userResponseDTO = userService.convertToUserDTO(user);
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping
-    private List<UserDTO> getAllUsers() {
-        List<UserDTO> userDTOs = userService.getAllUsers();
-        return new ResponseEntity<>(userDTOs, HttpStatus.OK).getBody();
+    private List<UserResponseDTO> getAllUsers() {
+        List<UserResponseDTO> userResponseDTOs = userService.getAllUsers();
+        return new ResponseEntity<>(userResponseDTOs, HttpStatus.OK).getBody();
     }
 }
