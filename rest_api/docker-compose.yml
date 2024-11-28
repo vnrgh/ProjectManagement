@@ -5,6 +5,8 @@ services:
     image: postgres
     container_name: postgres
     restart: always
+    volumes:
+      - project_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgres
     ports:
@@ -23,3 +25,17 @@ services:
       - 8080:8080
     depends_on:
       - postgres
+
+  sonarqube:
+    image: sonarqube:community
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    ports:
+      - "9000:9000"
+volumes:
+  project_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:

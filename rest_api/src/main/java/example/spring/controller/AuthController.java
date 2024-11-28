@@ -34,7 +34,7 @@ public class AuthController {
     @PostMapping("/signup")
     private ResponseEntity<Long> signup(@Valid @RequestBody UserDTO userDTO) {
         Long id = authService.signup(userDTO);
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @PostMapping("/signin")

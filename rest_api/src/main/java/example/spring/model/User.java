@@ -2,10 +2,7 @@ package example.spring.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import example.spring.util.validation.UniqueUsername;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
 import java.util.List;
