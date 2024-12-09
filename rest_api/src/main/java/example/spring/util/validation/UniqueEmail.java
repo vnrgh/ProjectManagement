@@ -11,9 +11,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueUsernameValidator.class)
+@Constraint(validatedBy = UniqueEmailValidator.class)
 @Documented
-public @interface UniqueUsername {
+public @interface UniqueEmail {
     // error message
     String message() default "is not unique";
     //represents group of constraints

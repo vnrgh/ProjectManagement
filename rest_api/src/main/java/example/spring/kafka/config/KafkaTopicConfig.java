@@ -16,4 +16,11 @@ public class KafkaTopicConfig {
                 .name("testTopic")
                 .build();
     }
+
+    @Bean
+    public NewTopic welcomeMailTopic() {
+        return TopicBuilder
+                .name("welcomeMailTopic")
+                .build();
+    }
 }

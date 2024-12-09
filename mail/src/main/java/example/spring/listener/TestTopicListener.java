@@ -1,19 +1,18 @@
 package example.spring.listener;
 
-import example.spring.service.ExampleMailSender;
+import example.spring.service.CustomMailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MailTopicListener {
+public class TestTopicListener {
 
-    Logger logger = LoggerFactory.getLogger(MailTopicListener.class);
+    Logger logger = LoggerFactory.getLogger(TestTopicListener.class);
+    private final CustomMailSender mailSender;
 
-    private final ExampleMailSender mailSender;
-
-    public MailTopicListener(ExampleMailSender mailSender) {
+    public TestTopicListener(CustomMailSender mailSender) {
         this.mailSender = mailSender;
     }
 

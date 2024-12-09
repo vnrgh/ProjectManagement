@@ -1,5 +1,7 @@
+
 package example.spring.controller;
 
+import example.spring.kafka.MessageProducer;
 import example.spring.model.dto.SignInRequestDTO;
 import example.spring.model.dto.SignInResponseDTO;
 import example.spring.model.dto.UserDTO;
@@ -26,14 +28,18 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
+    private final MessageProducer messageProducer;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, MessageProducer messageProducer) {
         this.authService = authService;
+        this.messageProducer = messageProducer;
     }
 
     @PostMapping("/signup")
     private ResponseEntity<Long> signup(@Valid @RequestBody UserDTO userDTO) {
         Long id = authService.signup(userDTO);
+        String welcomeMessage = "Welcome, " + userDTO.getUsername() + "!";
+        messageProducer.sendMessage("welcomeMailTopic", userDTO.getEmail() + ";" + welcomeMessage);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
