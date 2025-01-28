@@ -9,6 +9,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,4 +21,5 @@ public class TaskDTO {
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
     private String deadline;
+    private List<Long> employeeIds;
 }

@@ -5,57 +5,72 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="1" author="any_author">
-        <insert tableName="projects">
-            <column name="project_description" value="My first project"/>
-            <column name="project_name" value="O4ko"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="2" author="any_author">
-        <insert tableName="tasks">
-            <column name="task_description" value="My first task"/>
-            <column name="difficulty" value="EASY"/>
-            <column name="deadline" value="next week"/>
-            <column name="project_id" valueNumeric="1"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="3" author="any_author">
-        <insert tableName="employees">
-            <column name="first_name" value="John"/>
-            <column name="last_name" value="Doe"/>
-            <column name="age" valueNumeric="30"/>
-            <column name="salary" valueNumeric="50000"/>
-            <column name="skill" value="JUNIOR"/>
-            <column name="task_id" type="BIGINT" valueNumeric="1"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="4" author="any_author">
-        <insert tableName="users">
-            <column name="username" value="admin"/>
-            <column name="password" value="$2a$10$a94k7iEPyluMT7NR2ewX0uhwpNxhWp1bev9Yjx2TIOK6YojolWPJK"/>
-            <column name="email" value="admin@gmail.com"/>
-            <column name="employee_id" valueNumeric="1"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="5" author="any_author">
+    <!-- Данные для roles -->
+    <changeSet id="1" author="your_name">
         <insert tableName="roles">
             <column name="name" value="ADMIN"/>
         </insert>
         <insert tableName="roles">
-            <column name="role_id" valueNumeric="2"/>
             <column name="name" value="EMPLOYEE"/>
         </insert>
     </changeSet>
 
-    <changeSet id="6" author="any_author">
-        <insert tableName="user_roles">
-            <column name="role_id" valueNumeric="1"/>
-            <column name="user_id" valueNumeric="1"/>
+    <!-- Данные для employees-->
+    <changeSet id="2" author="your_name">
+        <insert tableName="employees">
+            <column name="first_name" value="John"/>
+            <column name="last_name" value="Doe"/>
+            <column name="age" valueNumeric="30"/>
+            <column name="salary" valueNumeric="60000"/>
+            <column name="skill" value="JUNIOR"/>
         </insert>
     </changeSet>
+
+    <!-- Данные для users -->
+    <changeSet id="3" author="your_name">
+        <insert tableName="users">
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$a94k7iEPyluMT7NR2ewX0uhwpNxhWp1bev9Yjx2TIOK6YojolWPJK"/>
+            <column name="email" value="admin@example.com"/>
+            <column name="employee_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <!-- Данные для user_roles -->
+    <changeSet id="4" author="your_name">
+        <insert tableName="user_roles">
+            <column name="user_id" valueNumeric="1"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <!-- Данные для projects -->
+    <changeSet id="5" author="your_name">
+        <insert tableName="projects">
+            <column name="project_name" value="Project A"/>
+            <column name="project_description" value="Description of Project A"/>
+        </insert>
+    </changeSet>
+
+    <!-- Данные для tasks -->
+    <changeSet id="6" author="your_name">
+        <insert tableName="tasks">
+            <column name="task_description" value="Task 1"/>
+            <column name="difficulty" value="EASY"/>
+            <column name="deadline" value="2025-01-31"/>
+            <column name="project_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+
+
+    <!-- Данные для employee_tasks -->
+    <changeSet id="7" author="your_name">
+        <insert tableName="employee_tasks">
+            <column name="task_id" valueNumeric="1"/>
+            <column name="employee_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
 
 </databaseChangeLog>

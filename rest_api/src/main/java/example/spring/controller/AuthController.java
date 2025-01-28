@@ -40,7 +40,7 @@ public class AuthController {
         Long id = authService.signup(userDTO);
         String welcomeMessage = "Welcome, " + userDTO.getUsername() + "!";
         messageProducer.sendMessage("welcomeMailTopic", userDTO.getEmail() + ";" + welcomeMessage);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")

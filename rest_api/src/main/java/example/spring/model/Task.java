@@ -1,12 +1,12 @@
 package example.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import example.spring.enums.Difficulty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,14 +19,26 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
     private Long id;
-    @Column(name = "task_description")
+
+    @Column(name = "task_description", nullable = false)
     private String taskDescription;
 
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
+
     private String deadline;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false)
-    private Project project;
+//    @ToString.Exclude
+    private Project project; // связь с Project устанавливается после регистрации
+
+    @JsonIgnore
+    @ManyToMany
+//    @ToString.Exclude
+    @JoinTable(name = "employee_tasks",
+            joinColumns = {@JoinColumn(name = "task_id")},
+            inverseJoinColumns = {@JoinColumn(name = "employee_id")})
+    private List<Employee> employees;
 }
+

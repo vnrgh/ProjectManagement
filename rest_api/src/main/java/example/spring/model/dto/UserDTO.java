@@ -27,5 +27,4 @@ public class UserDTO {
     @Email
 //    @UniqueEmail
     private String email;
-    private Long employeeId;
 }

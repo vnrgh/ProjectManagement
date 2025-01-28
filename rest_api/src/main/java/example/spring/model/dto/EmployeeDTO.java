@@ -15,5 +15,5 @@ public class EmployeeDTO {
     private int age;
     private double salary;
     private Skill skill;
-    private Long taskId;
+    private Long userId;
 }

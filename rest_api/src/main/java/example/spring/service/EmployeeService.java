@@ -16,26 +16,38 @@ import java.util.List;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
-    public EmployeeService (EmployeeRepository employeeRepository, TaskRepository taskRepository) {
+    public EmployeeService (EmployeeRepository employeeRepository, UserRepository userRepository) {
         this.employeeRepository = employeeRepository;
-        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     public Long createEmployee(EmployeeDTO employeeDTO) {
-        Task task = taskRepository.findById(employeeDTO.getTaskId())
-                .orElseThrow(() -> new EmployeeNotFoundException("Task with id " + employeeDTO.getTaskId() + " was not found"));
+        // Получаем пользователя по ID
+        User user = userRepository.findById(employeeDTO.getUserId())
+                .orElseThrow(() -> new EmployeeNotFoundException("User with id " + employeeDTO.getUserId() + " was not found"));
 
+        // Создаем сотрудника
         Employee employee = Employee.builder()
                 .firstName(employeeDTO.getFirstName())
                 .lastName(employeeDTO.getLastName())
                 .age(employeeDTO.getAge())
                 .skill(employeeDTO.getSkill())
                 .salary(employeeDTO.getSalary())
-                .task(task).build();
-        return employeeRepository.save(employee).getId();
+                .user(user) // Устанавливаем связь с пользователем
+                .build();
+
+        // Сохраняем сотрудника
+        employee = employeeRepository.save(employee);
+
+        // Обновляем связь у пользователя
+        user.setEmployee(employee);
+        userRepository.save(user);
+
+        return employee.getId();
     }
+
 
     public Employee getEmployeeById(Long id) {
         return employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee with id " + id + " was not found"));
@@ -49,7 +61,7 @@ public class EmployeeService {
         Employee existingEmployee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee with id " + id + " was not found"));
 
-        Task task = taskRepository.findById(employeeDTO.getTaskId())
+        User user = userRepository.findById(employeeDTO.getUserId())
                 .orElseThrow(() -> new EmployeeNotFoundException("Task with id " + id + " was not found"));
 
         existingEmployee.setFirstName(employeeDTO.getFirstName());
@@ -57,7 +69,7 @@ public class EmployeeService {
         existingEmployee.setAge(employeeDTO.getAge());
         existingEmployee.setSalary(employeeDTO.getSalary());
         existingEmployee.setSkill(employeeDTO.getSkill());
-        existingEmployee.setTask(task);
+        existingEmployee.setUser(user);
 
         employeeRepository.save(existingEmployee);
     }

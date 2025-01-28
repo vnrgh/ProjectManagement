@@ -35,18 +35,16 @@ public class UserService implements UserDetailsService {
     public Long createUser(UserDTO userDTO) {
         Role role = roleRepository.findByName("EMPLOYEE");
 
-        Employee employee = employeeRepository.findById(userDTO.getEmployeeId())
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee with id " + userDTO.getEmployeeId() + " was not found"));
-
         User user = User.builder()
                 .username(userDTO.getUsername())
                 .password(userDTO.getPassword())
                 .email(userDTO.getEmail())
                 .roles(List.of(role))
-                .employee(employee)
                 .build();
+
         return userRepository.save(user).getId();
     }
+
 
     @Loggable
     public User getUserById(Long id) {
@@ -76,9 +74,9 @@ public class UserService implements UserDetailsService {
         userResponseDTO.setUsername(user.getUsername());
         userResponseDTO.setEmail(user.getEmail());
 
-        if (user.getEmployee() != null) {
-            userResponseDTO.setEmployeeId(user.getEmployee().getId());
-        }
+//        if (user.getEmployee() != null) {
+//            userResponseDTO.setEmployeeId(user.getEmployee().getId());
+//        }
         return userResponseDTO;
     }
 }

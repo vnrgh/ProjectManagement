@@ -1,17 +1,9 @@
 package example.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import example.spring.enums.Skill;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,16 +21,20 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
     private Long id;
-    @Column(name = "first_name")
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "last_name")
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
     private int age;
     private double salary;
+
     @Enumerated(EnumType.STRING)
     private Skill skill;
 
-    @OneToOne
-    @JoinColumn(name = "task_id")
-    private Task task;
+    @JsonIgnore
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, optional = true)
+    private User user; // Связь с User (устанавливается после регистрации)
 }

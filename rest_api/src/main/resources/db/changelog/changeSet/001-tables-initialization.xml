@@ -5,89 +5,65 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="1" author="any_author">
-        <createTable tableName="projects">
-            <column autoIncrement="true" name="project_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_projects"/>
+    <!-- Таблица roles -->
+    <changeSet id="1" author="your_name">
+        <createTable tableName="roles">
+            <column name="role_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_roles"/>
             </column>
-            <column name="project_description" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="project_name" type="VARCHAR(255)">
+            <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="2" author="any_author">
-        <createTable tableName="tasks">
-            <column autoIncrement="true" name="task_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tasks"/>
-            </column>
-            <column name="task_description" type="VARCHAR(255)"/>
-            <column name="difficulty" type="VARCHAR(255)"/>
-            <column name="deadline" type="VARCHAR(255)"/>
-            <column name="project_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addForeignKeyConstraint baseTableName="tasks"
-                                 baseColumnNames="project_id"
-                                 referencedTableName="projects"
-                                 referencedColumnNames="project_id"
-                                 constraintName="fk_task_project"/>
-
-    </changeSet>
-
-    <changeSet id="3" author="any_author">
+    <!-- Таблица employees -->
+    <changeSet id="2" author="your_name">
         <createTable tableName="employees">
-            <column autoIncrement="true" name="employee_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_employees"/>
+            <column name="employee_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_employees"/>
             </column>
-            <column name="first_name" type="VARCHAR(255)"/>
-            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="age" type="INTEGER"/>
             <column name="salary" type="DOUBLE PRECISION"/>
             <column name="skill" type="VARCHAR(255)"/>
-            <column name="task_id" type="BIGINT"/>
         </createTable>
-
-        <addForeignKeyConstraint baseTableName="employees"
-                                 baseColumnNames="task_id"
-                                 referencedTableName="tasks"
-                                 referencedColumnNames="task_id"
-                                 constraintName="fk_employee_task"/>
     </changeSet>
 
-    <changeSet id="4" author="any_author">
+    <!-- Таблица users -->
+    <changeSet id="3" author="your_name">
         <createTable tableName="users">
-            <column name="user_id" autoIncrement="true" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            <column name="user_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_users"/>
             </column>
-            <column name="username" type="VARCHAR(255)"/>
-            <column name="password" type="VARCHAR(255)"/>
-            <column name="email" type="VARCHAR(255)"/>
-            <column name="employee_id" type="BIGINT"/>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="employee_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="users"
                                  baseColumnNames="employee_id"
                                  referencedTableName="employees"
                                  referencedColumnNames="employee_id"
-                                 constraintName="fk_user_employee"/>
+                                 constraintName="fk_users_employees"/>
     </changeSet>
 
-    <changeSet id="5" author="any_author">
-        <createTable tableName="roles">
-            <column name="role_id" autoIncrement="true" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_roles"/>
-            </column>
-            <column name="name" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="6" author="any_author">
+    <!-- Таблица user_roles -->
+    <changeSet id="4" author="your_name">
         <createTable tableName="user_roles">
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false"/>
@@ -96,21 +72,72 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-
-        <addForeignKeyConstraint
-                baseTableName="user_roles"
-                baseColumnNames="user_id"
-                referencedTableName="users"
-                referencedColumnNames="user_id"
-                constraintName="fk_user_roles_user"/>
-
-        <addForeignKeyConstraint
-                baseTableName="user_roles"
-                baseColumnNames="role_id"
-                referencedTableName="roles"
-                referencedColumnNames="role_id"
-                constraintName="fk_user_roles_role"/>
+        <addForeignKeyConstraint baseTableName="user_roles"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_user_roles_user"/>
+        <addForeignKeyConstraint baseTableName="user_roles"
+                                 baseColumnNames="role_id"
+                                 referencedTableName="roles"
+                                 referencedColumnNames="role_id"
+                                 constraintName="fk_user_roles_role"/>
     </changeSet>
 
+    <!-- Таблица projects -->
+    <changeSet id="5" author="your_name">
+        <createTable tableName="projects">
+            <column name="project_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_projects"/>
+            </column>
+            <column name="project_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_description" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Таблица tasks -->
+    <changeSet id="6" author="your_name">
+        <createTable tableName="tasks">
+            <column name="task_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_tasks"/>
+            </column>
+            <column name="task_description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="difficulty" type="VARCHAR(255)"/>
+            <column name="deadline" type="VARCHAR(255)"/>
+            <column name="project_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="tasks"
+                                 baseColumnNames="project_id"
+                                 referencedTableName="projects"
+                                 referencedColumnNames="project_id"
+                                 constraintName="fk_tasks_projects"/>
+    </changeSet>
+
+<!--     Таблица employee_tasks -->
+    <changeSet id="7" author="your_name">
+        <createTable tableName="employee_tasks">
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="employee_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="employee_tasks"
+                                 baseColumnNames="task_id"
+                                 referencedTableName="tasks"
+                                 referencedColumnNames="task_id"
+                                 constraintName="fk_employee_tasks_task"/>
+        <addForeignKeyConstraint baseTableName="employee_tasks"
+                                 baseColumnNames="employee_id"
+                                 referencedTableName="employees"
+                                 referencedColumnNames="employee_id"
+                                 constraintName="fk_employee_tasks_employee"/>
+    </changeSet>
 </databaseChangeLog>
