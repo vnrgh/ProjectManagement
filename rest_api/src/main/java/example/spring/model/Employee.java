@@ -28,13 +28,17 @@ public class Employee {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(nullable = false)
     private int age;
+
+    @Column(nullable = false)
     private double salary;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Skill skill;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, optional = true)
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private User user; // Связь с User (устанавливается после регистрации)
 }

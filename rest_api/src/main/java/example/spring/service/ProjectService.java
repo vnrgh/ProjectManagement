@@ -26,7 +26,7 @@ public class ProjectService {
     }
 
     public Project getProjectById(Long id) {
-        return projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException("Project with id " + id + " was not found"));
+        return projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException("Project with id " + id + " not found"));
     }
 
     public List<Project> getAllProjects() {
@@ -35,7 +35,7 @@ public class ProjectService {
 
     public void updateProjectById(Long id, Project project) {
         Project existingProject = projectRepository.findById(id)
-                .orElseThrow(() -> new ProjectNotFoundException("Project with id " + id + " was not found"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project with id " + id + " not found"));
 
         existingProject.setProjectName(project.getProjectName());
         existingProject.setProjectDescription(project.getProjectDescription());

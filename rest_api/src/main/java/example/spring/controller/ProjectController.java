@@ -20,29 +20,28 @@ public class ProjectController {
 
     @PostMapping
     private ResponseEntity<Long> createProject(@RequestBody ProjectDTO projectDTO) {
-        Long id = projectService.createProject(projectDTO);
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        return new ResponseEntity<>(projectService.createProject(projectDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    private Project getProjectById(@PathVariable Long id) {
-        return projectService.getProjectById(id);
+    private ResponseEntity<Project> getProjectById(@PathVariable Long id) {
+        return new ResponseEntity<>(projectService.getProjectById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    private List<Project> getAllProtsjec() {
-        return projectService.getAllProjects();
+    private ResponseEntity<List<Project>> getAllProjects() {
+        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     private ResponseEntity<String> updateProjectById(@PathVariable Long id, @RequestBody Project project) {
         projectService.updateProjectById(id, project);
-        return new ResponseEntity<>("Project with id " + id + " was updated", HttpStatus.OK);
+        return new ResponseEntity<>("Project with id " + id + " updated", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     private ResponseEntity<String> deleteProjectById(@PathVariable Long id) {
         projectService.deleteProjectById(id);
-        return new ResponseEntity<>("Project with id " + id + " was deleted", HttpStatus.OK);
+        return new ResponseEntity<>("Project with id " + id + " deleted", HttpStatus.OK);
     }
 }

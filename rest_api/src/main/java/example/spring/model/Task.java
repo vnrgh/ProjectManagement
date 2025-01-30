@@ -24,18 +24,18 @@ public class Task {
     private String taskDescription;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "difficulty", nullable = false)
     private Difficulty difficulty;
 
+    @Column(name = "deadline", nullable = false)
     private String deadline;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id", nullable = false)
-//    @ToString.Exclude
     private Project project; // связь с Project устанавливается после регистрации
 
     @JsonIgnore
     @ManyToMany
-//    @ToString.Exclude
     @JoinTable(name = "employee_tasks",
             joinColumns = {@JoinColumn(name = "task_id")},
             inverseJoinColumns = {@JoinColumn(name = "employee_id")})

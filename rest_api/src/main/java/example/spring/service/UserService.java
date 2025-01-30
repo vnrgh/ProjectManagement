@@ -24,12 +24,10 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final EmployeeRepository employeeRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, EmployeeRepository employeeRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.employeeRepository = employeeRepository;
     }
 
     public Long createUser(UserDTO userDTO) {
@@ -47,8 +45,9 @@ public class UserService implements UserDetailsService {
 
 
     @Loggable
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserResponseDTO getUserById(Long id) {
+        return userRepository.findById(id).map(this::convertToUserDTO)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
     public List<UserResponseDTO> getAllUsers() {
@@ -58,6 +57,8 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+    // ---------implements UserDetailsService ----------
+    // TODO НА ЧТО ВЛИЯЕТ ЭТОТ МЕТОД И UserDetailsService
     @Override
     public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -73,10 +74,10 @@ public class UserService implements UserDetailsService {
         userResponseDTO.setId(user.getId());
         userResponseDTO.setUsername(user.getUsername());
         userResponseDTO.setEmail(user.getEmail());
+        if (user.getEmployee() != null) {
+            userResponseDTO.setEmployeeId(user.getEmployee().getId());
+        }
 
-//        if (user.getEmployee() != null) {
-//            userResponseDTO.setEmployeeId(user.getEmployee().getId());
-//        }
         return userResponseDTO;
     }
 }

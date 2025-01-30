@@ -1,5 +1,6 @@
 package example.spring.service;
 
+import example.spring.exception.EmployeeNotFoundException;
 import example.spring.exception.ProjectNotFoundException;
 import example.spring.exception.TaskNotFoundException;
 import example.spring.model.Employee;
@@ -22,7 +23,6 @@ public class TaskService {
     private final ProjectRepository projectRepository;
     private final EmployeeRepository employeeRepository;
 
-    private static final Logger log = LoggerFactory.getLogger(TaskService.class);
 
     public TaskService(TaskRepository taskRepository, ProjectRepository projectRepository, EmployeeRepository employeeRepository) {
         this.taskRepository = taskRepository;
@@ -31,13 +31,13 @@ public class TaskService {
     }
 
     public Long createTask(TaskDTO taskDTO) {
-        System.out.println("TaskDto received");
         Project project = projectRepository.findById(taskDTO.getProjectId())
-                .orElseThrow(() -> new ProjectNotFoundException("Project with id " + taskDTO.getProjectId() + " was not found"));
-        System.out.println("Project received");
+                .orElseThrow(() -> new ProjectNotFoundException("Project with id " + taskDTO.getProjectId() + " not found"));
 
         List<Employee> employees = employeeRepository.findAllById(taskDTO.getEmployeeIds());
-        System.out.println("Employees received");
+        if (employees.size() != taskDTO.getEmployeeIds().size()) {
+            throw new EmployeeNotFoundException("One or more employees not found for the provided ids");
+        }
 
         Task task = Task.builder()
                 .taskDescription(taskDTO.getTaskDescription())
@@ -45,40 +45,39 @@ public class TaskService {
                 .deadline(taskDTO.getDeadline())
                 .employees(employees)
                 .project(project).build();
-        System.out.println("Task was built");
 
         task = taskRepository.save(task);
-
-
         project.setTasks(List.of(task));
-        System.out.println("List of tasks was set into project");
 
-//        projectRepository.save(project);
-//        System.out.println("Project saved");
-
-//        return taskRepository.save(task).getId();
         return task.getId();
     }
 
-    public Task getTaskById(Long id) {
-        return taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " was not found"));
+    public TaskDTO getTaskById(Long id) {
+        return taskRepository.findById(id).map(this::convertToTaskDTO)
+                .orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " not found"));
     }
 
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public List<TaskDTO> getAllTasks() {
+        List<Task> tasks = taskRepository.findAll();
+        return tasks.stream().map(this::convertToTaskDTO).toList();
     }
 
     public void updateTask(Long id, TaskDTO taskDTO) {
         Project project = projectRepository.findById(taskDTO.getProjectId())
-                .orElseThrow(() -> new TaskNotFoundException("Project with id " + taskDTO.getProjectId() + " was not found"));
+                .orElseThrow(() -> new TaskNotFoundException("Project with id " + taskDTO.getProjectId() + " not found"));
 
-//        List<Employee> employees = employeeRepository.findAllById(taskDTO.getEmployeeIds());
+        List<Employee> employees = employeeRepository.findAllById(taskDTO.getEmployeeIds());
+        if (employees.size() != taskDTO.getEmployeeIds().size()) {
+            throw new EmployeeNotFoundException("One or more employees not found for the provided ids");
+        }
+
         Task existingTask = taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " was not found"));
+                .orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " not found"));
+
         existingTask.setTaskDescription(taskDTO.getTaskDescription());
         existingTask.setDifficulty(taskDTO.getDifficulty());
         existingTask.setDeadline(taskDTO.getDeadline());
-//        existingTask.setEmployees(employees);
+        existingTask.setEmployees(employees);
         existingTask.setProject(project);
 
         taskRepository.save(existingTask);
@@ -86,5 +85,19 @@ public class TaskService {
 
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
+    }
+
+    public TaskDTO convertToTaskDTO(Task task) {
+        List<Long> employeeIds = task.getEmployees().stream().map(Employee::getId).toList();
+
+        TaskDTO taskDTO = new TaskDTO();
+        taskDTO.setProjectId(task.getProject().getId());
+        taskDTO.setTaskDescription(task.getTaskDescription());
+        taskDTO.setDeadline(task.getDeadline());
+        taskDTO.setDifficulty(task.getDifficulty());
+        taskDTO.setEmployeeIds(employeeIds);
+        taskDTO.setId(task.getId());
+
+        return taskDTO;
     }
 }

@@ -1,6 +1,7 @@
 package example.spring.service;
 
 import example.spring.exception.EmployeeNotFoundException;
+import example.spring.exception.UserNotFoundException;
 import example.spring.model.Employee;
 import example.spring.model.Task;
 import example.spring.model.User;
@@ -11,37 +12,36 @@ import example.spring.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
 
-    public EmployeeService (EmployeeRepository employeeRepository, UserRepository userRepository) {
+    public EmployeeService (EmployeeRepository employeeRepository, UserRepository userRepository, TaskRepository taskRepository) {
         this.employeeRepository = employeeRepository;
         this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
     }
 
     public Long createEmployee(EmployeeDTO employeeDTO) {
-        // Получаем пользователя по ID
         User user = userRepository.findById(employeeDTO.getUserId())
-                .orElseThrow(() -> new EmployeeNotFoundException("User with id " + employeeDTO.getUserId() + " was not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with id " + employeeDTO.getUserId() + " not found"));
 
-        // Создаем сотрудника
         Employee employee = Employee.builder()
                 .firstName(employeeDTO.getFirstName())
                 .lastName(employeeDTO.getLastName())
                 .age(employeeDTO.getAge())
                 .skill(employeeDTO.getSkill())
                 .salary(employeeDTO.getSalary())
-                .user(user) // Устанавливаем связь с пользователем
+                .user(user)
                 .build();
 
-        // Сохраняем сотрудника
         employee = employeeRepository.save(employee);
 
-        // Обновляем связь у пользователя
         user.setEmployee(employee);
         userRepository.save(user);
 
@@ -50,7 +50,7 @@ public class EmployeeService {
 
 
     public Employee getEmployeeById(Long id) {
-        return employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee with id " + id + " was not found"));
+        return employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee with id " + id + " not found"));
     }
 
     public List<Employee> getAllEmployees() {
@@ -58,23 +58,23 @@ public class EmployeeService {
     }
 
     public void updateEmployeeById(Long id, EmployeeDTO employeeDTO) {
-        Employee existingEmployee = employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee with id " + id + " was not found"));
-
-        User user = userRepository.findById(employeeDTO.getUserId())
-                .orElseThrow(() -> new EmployeeNotFoundException("Task with id " + id + " was not found"));
+        Employee existingEmployee = getEmployeeById(id);
 
         existingEmployee.setFirstName(employeeDTO.getFirstName());
         existingEmployee.setLastName(employeeDTO.getLastName());
         existingEmployee.setAge(employeeDTO.getAge());
         existingEmployee.setSalary(employeeDTO.getSalary());
         existingEmployee.setSkill(employeeDTO.getSkill());
-        existingEmployee.setUser(user);
 
         employeeRepository.save(existingEmployee);
     }
 
-    public void deleteEmployeeById(Long id) {
+    public void deleteEmployeeById(Long id, Long userId) {
+        if (taskRepository.existsByEmployeesId(id)) {
+            throw new IllegalStateException("Employee with unfinished task(s) cannot be deleted");
+        }
+
+        userRepository.deleteById(userId);
         employeeRepository.deleteById(id);
     }
 }

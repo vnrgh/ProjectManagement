@@ -1,13 +1,11 @@
 package example.spring.model.dto;
 
 import example.spring.enums.Difficulty;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 
 import java.util.List;
 
@@ -15,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskDTO {
+    private Long id;
     private Long projectId;
     private String taskDescription;
 
