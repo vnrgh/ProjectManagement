@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDTO {
-    private Long id;
+public class UserRequestDTO {
+//    private Long id;
     @NotBlank
     @Size(min = 3, message = "size must be at least 3 symbols")
     @UniqueUsername

@@ -33,12 +33,12 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public void updateProjectById(Long id, Project project) {
+    public void updateProjectById(Long id, ProjectDTO projectDTO) {
         Project existingProject = projectRepository.findById(id)
                 .orElseThrow(() -> new ProjectNotFoundException("Project with id " + id + " not found"));
 
-        existingProject.setProjectName(project.getProjectName());
-        existingProject.setProjectDescription(project.getProjectDescription());
+        existingProject.setProjectName(projectDTO.getProjectName());
+        existingProject.setProjectDescription(projectDTO.getProjectDescription());
         projectRepository.save(existingProject);
     }
 

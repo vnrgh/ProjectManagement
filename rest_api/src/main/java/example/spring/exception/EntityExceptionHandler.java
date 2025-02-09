@@ -45,16 +45,6 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    @ResponseBody
-//    public ResponseEntity<List> responseEntityExceptionHandler(final MethodArgumentNotValidException ex) {
-//
-//        List list = ex.getBindingResult().getAllErrors().stream()
-//                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-//                .collect(Collectors.toList());
-//
-//        return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
-//    }
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                HttpHeaders headers, HttpStatusCode status,
@@ -68,11 +58,4 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
         }
         return new ResponseEntity<>(exceptions, status);
     }
-
-//    @ExceptionHandler(BadCredentialsException.class)
-//    public ResponseEntity<Map<String, String>> handleBadCredentialsException(BadCredentialsException ex) {
-//        Map<String, String> errorResponse = new HashMap<>();
-//        errorResponse.put("error", "Invalid username or password");
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-//    }
 }

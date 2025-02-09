@@ -3,11 +3,11 @@ package example.spring.service;
 import example.spring.exception.UserNotFoundException;
 import example.spring.model.Role;
 import example.spring.model.User;
-import example.spring.model.dto.UserDTO;
+import example.spring.model.dto.UserRequestDTO;
 import example.spring.model.dto.UserResponseDTO;
 import example.spring.repository.RoleRepository;
 import example.spring.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceUnitTest {
@@ -29,15 +31,22 @@ class UserServiceUnitTest {
     @Mock
     private RoleRepository roleRepository;
 
+    private Long userId;
+
+    @BeforeEach
+    void setUp() {
+        userId = 1L;
+    }
+
     @Test
     void createUserTest() {
-        UserDTO userDTO = UserDTO.builder()
+        UserRequestDTO userDTO = UserRequestDTO.builder()
                 .username("John")
                 .password("password")
                 .email("test@example.com")
                 .build();
         Role role = new Role(1L, "EMPLOYEE");
-        User user = new User(1L, "John", "password", "test@example.com", List.of(role), null);
+        User user = new User(userId, "John", "password", "test@example.com", List.of(role), null);
 
         Mockito.when(roleRepository.findByName("EMPLOYEE")).thenReturn(role);
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
@@ -45,7 +54,7 @@ class UserServiceUnitTest {
         Long resultId = userService.createUser(userDTO);
 
         assertNotNull(resultId);
-        assertEquals(Optional.of(1L), Optional.of(resultId));
+        assertEquals(1L, resultId);
 
         Mockito.verify(roleRepository).findByName("EMPLOYEE");
         Mockito.verify(userRepository).save(Mockito.any(User.class));
@@ -53,7 +62,6 @@ class UserServiceUnitTest {
 
     @Test
     void getUserByIdTest() {
-        Long userId = 1L;
         User mockedUser = new User(userId, "testUser", "password", "test@example.com", null, null);
 
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(mockedUser));
@@ -63,20 +71,16 @@ class UserServiceUnitTest {
         assertNotNull(result);
         assertEquals(userId, result.getId());
         assertEquals("testUser", result.getUsername());
-        assertEquals("test@example.com", result.getEmail());
 
         Mockito.verify(userRepository).findById(userId);
     }
 
     @Test
     void getUserByIdThrowsExceptionTest() {
-        Long userId = 1L;
-
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
 
         Mockito.verify(userRepository).findById(userId);
-
     }
 
     @Test

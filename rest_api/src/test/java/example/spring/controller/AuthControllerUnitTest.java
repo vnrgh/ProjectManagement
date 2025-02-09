@@ -2,6 +2,7 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import example.spring.exception.EntityExceptionHandler;
+//import example.spring.kafka.MessageProducer;
 //import example.spring.model.dto.SignInRequestDTO;
 //import example.spring.model.dto.SignInResponseDTO;
 //import example.spring.security.jwt.TokenProvider;
@@ -11,13 +12,11 @@
 //import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 //import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 //import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.http.HttpMethod;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.MediaType;
 //import org.springframework.security.authentication.BadCredentialsException;
 //import org.springframework.test.context.ActiveProfiles;
 //import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 //import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 //
 //import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,10 +25,10 @@
 //import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 //
 //
-//@WebMvcTest(AuthControllerTest.class)
+//@WebMvcTest(AuthControllerUnitTest.class)
 //@AutoConfigureMockMvc
 //@ActiveProfiles("test")
-//class AuthControllerTest {
+//class AuthControllerUnitTest {
 //    private MockMvc mockMvc;
 //
 //    @MockBean
@@ -38,9 +37,12 @@
 //    @MockBean
 //    private TokenProvider tokenProvider;
 //
+//    @MockBean
+//    private MessageProducer messageProducer;
+//
 //    @BeforeEach
 //    void setUp() {
-//        this.mockMvc = MockMvcBuilders.standaloneSetup(new AuthController(authService))
+//        this.mockMvc = MockMvcBuilders.standaloneSetup(new AuthController(authService, messageProducer))
 //                .setControllerAdvice(new EntityExceptionHandler()).build();
 //    }
 //
@@ -49,7 +51,7 @@
 //        SignInRequestDTO signInRequestDTO = new SignInRequestDTO("admin", "password");
 //        ObjectMapper mapper = new ObjectMapper();
 //        String jsonBody = mapper.writeValueAsString(signInRequestDTO);
-//        when(authService.signin(signInRequestDTO)).thenReturn(new SignInResponseDTO("test_token"));
+//        when(authService.signIn(signInRequestDTO)).thenReturn(new SignInResponseDTO("test_token"));
 //
 //        mockMvc.perform(post("/auth/signin").content(jsonBody).contentType(MediaType.APPLICATION_JSON))
 //                .andExpect(result -> assertEquals(result.getResponse().getContentAsString(),
@@ -66,7 +68,7 @@
 //        SignInRequestDTO signInRequestDTO = new SignInRequestDTO("invalidUser", "wrongPassword");
 //
 //        String jsonBody = mapper.writeValueAsString(signInRequestDTO);
-//        when(authService.signin(signInRequestDTO)).thenThrow(new BadCredentialsException("Invalid username or password"));
+//        when(authService.signIn(signInRequestDTO)).thenThrow(new BadCredentialsException("Invalid username or password"));
 //        mockMvc.perform(post("/auth/signin").content(jsonBody).contentType(MediaType.APPLICATION_JSON))
 //                .andExpect(result -> {
 //                    assertEquals(result.getResponse().getStatus(), HttpStatus.BAD_REQUEST.value());

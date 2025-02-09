@@ -2,9 +2,8 @@ package example.spring.service;
 
 import example.spring.model.dto.SignInRequestDTO;
 import example.spring.model.dto.SignInResponseDTO;
-import example.spring.model.dto.UserDTO;
+import example.spring.model.dto.UserRequestDTO;
 import example.spring.security.jwt.TokenProvider;
-import example.spring.security.model.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,11 +23,11 @@ public class AuthService {
         this.tokenProvider = tokenProvider;
     }
 
-    public Long signup(UserDTO userDTO) {
+    public Long signUp(UserRequestDTO userDTO) {
         return userService.createUser(userDTO);
     }
 
-    public SignInResponseDTO signin(SignInRequestDTO requestDTO) {
+    public SignInResponseDTO signIn(SignInRequestDTO requestDTO) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(requestDTO.getUsername(), requestDTO.getPassword());
         try {

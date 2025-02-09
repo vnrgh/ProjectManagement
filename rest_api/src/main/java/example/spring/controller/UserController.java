@@ -1,7 +1,5 @@
 package example.spring.controller;
 
-import example.spring.model.User;
-import example.spring.model.dto.UserDTO;
 import example.spring.model.dto.UserResponseDTO;
 import example.spring.service.UserService;
 import org.springframework.http.HttpStatus;

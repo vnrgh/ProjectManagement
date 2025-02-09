@@ -64,7 +64,7 @@ public class TaskService {
 
     public void updateTask(Long id, TaskDTO taskDTO) {
         Project project = projectRepository.findById(taskDTO.getProjectId())
-                .orElseThrow(() -> new TaskNotFoundException("Project with id " + taskDTO.getProjectId() + " not found"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project with id " + taskDTO.getProjectId() + " not found"));
 
         List<Employee> employees = employeeRepository.findAllById(taskDTO.getEmployeeIds());
         if (employees.size() != taskDTO.getEmployeeIds().size()) {

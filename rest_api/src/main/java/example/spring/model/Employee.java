@@ -1,13 +1,11 @@
 package example.spring.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import example.spring.enums.Skill;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Data
@@ -39,6 +37,6 @@ public class Employee {
     private Skill skill;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private User user; // Связь с User (устанавливается после регистрации)
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private User user;
 }

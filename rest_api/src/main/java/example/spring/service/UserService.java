@@ -1,14 +1,11 @@
 package example.spring.service;
 
 import example.logger.aspect.Loggable;
-import example.spring.exception.EmployeeNotFoundException;
 import example.spring.exception.UserNotFoundException;
-import example.spring.model.Employee;
 import example.spring.model.Role;
 import example.spring.model.User;
-import example.spring.model.dto.UserDTO;
+import example.spring.model.dto.UserRequestDTO;
 import example.spring.model.dto.UserResponseDTO;
-import example.spring.repository.EmployeeRepository;
 import example.spring.repository.RoleRepository;
 import example.spring.repository.UserRepository;
 import example.spring.security.model.UserDetailsImpl;
@@ -30,7 +27,7 @@ public class UserService implements UserDetailsService {
         this.roleRepository = roleRepository;
     }
 
-    public Long createUser(UserDTO userDTO) {
+    public Long createUser(UserRequestDTO userDTO) {
         Role role = roleRepository.findByName("EMPLOYEE");
 
         User user = User.builder()
@@ -57,8 +54,6 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    // ---------implements UserDetailsService ----------
-    // TODO НА ЧТО ВЛИЯЕТ ЭТОТ МЕТОД И UserDetailsService
     @Override
     public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
