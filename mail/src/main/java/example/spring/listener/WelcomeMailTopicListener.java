@@ -20,11 +20,11 @@ public class WelcomeMailTopicListener {
             topics = "welcomeMailTopic"
     )
     public void listener(String data) {
-        logger.info("Listener received: " + data);
+        logger.info("Listener received: {}", data);
 
         String[] parts = data.split(";", 2);
         if (parts.length < 2) {
-            logger.error("Invalid message format: " + data);
+            logger.error("Invalid message format: {}", data);
             return;
         }
 

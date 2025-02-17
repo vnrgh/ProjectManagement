@@ -1,4 +1,3 @@
-
 package example.spring.service;
 
 import org.slf4j.Logger;
@@ -34,7 +33,6 @@ public class CustomMailSender {
             mailSender.send(simpleMailMessage);
         } catch (MailException e) {
             logger.error(e.getMessage());
-//            throw new Runtime(e.getMessage());
         }
     }
 }
