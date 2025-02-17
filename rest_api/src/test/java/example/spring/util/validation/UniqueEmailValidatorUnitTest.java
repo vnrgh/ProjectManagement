@@ -1,19 +1,18 @@
 package example.spring.util.validation;
 
 import example.spring.repository.UserRepository;
-import example.spring.util.validation.UniqueEmailValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UniqueEmailValidatorUnitTest {
+class UniqueEmailValidatorUnitTest {
     @Mock
     private UserRepository userRepository;
     private UniqueEmailValidator validator;
@@ -25,7 +24,7 @@ public class UniqueEmailValidatorUnitTest {
 
     @Test
     void emailIsUniqueTest() {
-        Mockito.when(userRepository.existsByEmail("unique@mail.com")).thenReturn(false);
+        when(userRepository.existsByEmail("unique@mail.com")).thenReturn(false);
 
         boolean isValid = validator.isValid("unique@mail.com", null);
 
@@ -34,7 +33,7 @@ public class UniqueEmailValidatorUnitTest {
 
     @Test
     void emailIsNotUnique() {
-        Mockito.when(userRepository.existsByEmail("notunique@mail.com")).thenReturn(true);
+        when(userRepository.existsByEmail("notunique@mail.com")).thenReturn(true);
 
         boolean isValid = validator.isValid("notunique@mail.com", null);
 

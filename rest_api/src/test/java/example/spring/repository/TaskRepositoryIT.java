@@ -8,6 +8,7 @@ import example.spring.model.Project;
 import example.spring.model.Task;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -19,6 +20,7 @@ import static org.junit.Assert.assertTrue;
 @DataJpaTest
 @Testcontainers
 @ContextConfiguration(classes = TestContainerConfig.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class TaskRepositoryIT {
 
     @Autowired
@@ -36,10 +38,10 @@ class TaskRepositoryIT {
         employeeRepository.deleteAll();
 
         List<Employee> employees = List.of(
-                new Employee(1L, "John1", "Doe1", 20, 1000.0, Skill.JUNIOR, null));
+                new Employee(1L, "firstName", "lastName", 11, 2000.0, Skill.JUNIOR, null));
         employees = employeeRepository.saveAll(employees);
 
-        Project project = new Project(1L, "project", "test project", null);
+        Project project = new Project(1L, "projectName", "description", null);
 
         Task task = new Task(1L, "description", Difficulty.EASY, "now", project, employees);
         taskRepository.save(task);

@@ -1,5 +1,0 @@
--- create schema testSchema;
--- create table testSchema.testTable(first_name varchar,
---                         last_name varchar,
---                         age int,
---                         skill varchar);

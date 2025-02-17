@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -18,10 +17,11 @@ import java.util.Optional;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-
 class ProjectServiceUnitTest {
     @InjectMocks
     private ProjectService projectService;
@@ -41,36 +41,36 @@ class ProjectServiceUnitTest {
     void createProject() {
         Project project = new Project(1L, "project", "test project", null);
 
-        Mockito.when(projectRepository.save(Mockito.any(Project.class))).thenReturn(project);
+        when(projectRepository.save(any(Project.class))).thenReturn(project);
 
         Long id = projectService.createProject(projectDTO);
 
         assertNotNull(id);
         assertEquals(1L, id);
 
-        Mockito.verify(projectRepository).save(Mockito.any(Project.class));
+        verify(projectRepository).save(any(Project.class));
     }
 
     @Test
     void getProjectByIdTest() {
         Project project = new Project(projectId, "project", "test project", null);
 
-        Mockito.when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
+        when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
 
         Project result = projectService.getProjectById(projectId);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
 
-        Mockito.verify(projectRepository).findById(projectId);
+        verify(projectRepository).findById(projectId);
     }
 
     @Test
     void getProjectByIdThrowsExceptionTest() {
-        Mockito.when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
+        when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
         assertThrows(ProjectNotFoundException.class, () -> projectService.getProjectById(projectId));
 
-        Mockito.verify(projectRepository).findById(projectId);
+        verify(projectRepository).findById(projectId);
     }
 
     @Test
@@ -79,7 +79,7 @@ class ProjectServiceUnitTest {
                 new Project(1L, "project1", "test project1", null),
                 new Project(1L, "project2", "test project2", null));
 
-        Mockito.when(projectRepository.findAll()).thenReturn(projects);
+        when(projectRepository.findAll()).thenReturn(projects);
 
         List<Project> result = projectService.getAllProjects();
 
@@ -88,15 +88,15 @@ class ProjectServiceUnitTest {
         assertEquals("project1", result.get(0).getProjectName());
         assertEquals("project2", result.get(1).getProjectName());
 
-        Mockito.verify(projectRepository).findAll();
+        verify(projectRepository).findAll();
     }
 
     @Test
     void updateProjectByIdTest() {
         Project project = new Project(projectId, "old Project", "old test project", null);
 
-        Mockito.when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
-        Mockito.when(projectRepository.save(Mockito.any(Project.class))).thenReturn(project);
+        when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
+        when(projectRepository.save(any(Project.class))).thenReturn(project);
 
         projectService.updateProjectById(projectId, projectDTO);
 
@@ -104,14 +104,14 @@ class ProjectServiceUnitTest {
         assertEquals(1L, project.getId());
         assertEquals("project", project.getProjectName());
 
-        Mockito.verify(projectRepository).save(Mockito.any(Project.class));
+        verify(projectRepository).save(any(Project.class));
     }
 
     @Test
     void deleteProjectByIdTest() {
         projectService.deleteProjectById(projectId);
 
-        Mockito.verify(projectRepository, Mockito.times(1)).deleteById(projectId);
+        verify(projectRepository, times(1)).deleteById(projectId);
     }
 }
 

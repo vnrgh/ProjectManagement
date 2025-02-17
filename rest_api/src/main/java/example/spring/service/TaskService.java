@@ -10,11 +10,8 @@ import example.spring.model.dto.TaskDTO;
 import example.spring.repository.EmployeeRepository;
 import example.spring.repository.ProjectRepository;
 import example.spring.repository.TaskRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -62,7 +59,7 @@ public class TaskService {
         return tasks.stream().map(this::convertToTaskDTO).toList();
     }
 
-    public void updateTask(Long id, TaskDTO taskDTO) {
+    public void updateTaskById(Long id, TaskDTO taskDTO) {
         Project project = projectRepository.findById(taskDTO.getProjectId())
                 .orElseThrow(() -> new ProjectNotFoundException("Project with id " + taskDTO.getProjectId() + " not found"));
 
@@ -83,7 +80,17 @@ public class TaskService {
         taskRepository.save(existingTask);
     }
 
-    public void deleteTask(Long id) {
+    public void deleteTaskById(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " not found"));
+
+        if (task.getEmployees().isEmpty()) {
+            throw new EmployeeNotFoundException("No employees found for task with id " + id);
+        }
+
+        task.getEmployees().clear();
+        taskRepository.save(task);
+
         taskRepository.deleteById(id);
     }
 

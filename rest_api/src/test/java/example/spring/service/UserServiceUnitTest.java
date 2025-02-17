@@ -12,15 +12,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceUnitTest {
@@ -48,23 +50,23 @@ class UserServiceUnitTest {
         Role role = new Role(1L, "EMPLOYEE");
         User user = new User(userId, "John", "password", "test@example.com", List.of(role), null);
 
-        Mockito.when(roleRepository.findByName("EMPLOYEE")).thenReturn(role);
-        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+        when(roleRepository.findByName("EMPLOYEE")).thenReturn(role);
+        when(userRepository.save(any(User.class))).thenReturn(user);
 
         Long resultId = userService.createUser(userDTO);
 
         assertNotNull(resultId);
         assertEquals(1L, resultId);
 
-        Mockito.verify(roleRepository).findByName("EMPLOYEE");
-        Mockito.verify(userRepository).save(Mockito.any(User.class));
+        verify(roleRepository).findByName("EMPLOYEE");
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
     void getUserByIdTest() {
         User mockedUser = new User(userId, "testUser", "password", "test@example.com", null, null);
 
-        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(mockedUser));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockedUser));
 
         UserResponseDTO result = userService.getUserById(userId);
 
@@ -72,15 +74,15 @@ class UserServiceUnitTest {
         assertEquals(userId, result.getId());
         assertEquals("testUser", result.getUsername());
 
-        Mockito.verify(userRepository).findById(userId);
+        verify(userRepository).findById(userId);
     }
 
     @Test
     void getUserByIdThrowsExceptionTest() {
-        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
 
-        Mockito.verify(userRepository).findById(userId);
+        verify(userRepository).findById(userId);
     }
 
     @Test
@@ -88,7 +90,7 @@ class UserServiceUnitTest {
         List<User> users = List.of(new User(1L, "testUser1", "password1", "test1@example.com", null, null),
                 new User(2L, "testUser2", "password2", "test2@example.com", null, null));
 
-        Mockito.when(userRepository.findAll()).thenReturn(users);
+        when(userRepository.findAll()).thenReturn(users);
 
         List<UserResponseDTO> result = userService.getAllUsers();
 
@@ -97,7 +99,7 @@ class UserServiceUnitTest {
         assertEquals("testUser1", result.get(0).getUsername());
         assertEquals("testUser2", result.get(1).getUsername());
 
-        Mockito.verify(userRepository).findAll();
+        verify(userRepository).findAll();
     }
 }
 

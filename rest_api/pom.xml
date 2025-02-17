@@ -59,11 +59,12 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.h2database</groupId>-->
+<!--            <artifactId>h2</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        todo до удаления h2 работали все тесты-->
 
         <!-- https://mvnrepository.com/artifact/io.rest-assured/spring-mock-mvc -->
         <dependency>
@@ -176,7 +177,6 @@
                     <excludes>
                         <exclude>**/spring/model/**/*</exclude>
                         <exclude>**/spring/exception/*</exclude>
-                        <exclude>**/spring/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>

@@ -1,7 +1,6 @@
 package example.spring.kafka.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +14,13 @@ public class KafkaTopicConfig {
     @Value("${spring.kafka.topic.welcomeMailTopic}")
     private String welcomeMailTopic;
 
-    @Value("${spring.kafka.topic.testTopic}")
-    private String testTopic;
+    @Value("${spring.kafka.topic.customTopic}")
+    private String customTopic;
 
     @Bean
-    public NewTopic testTopic() {
+    public NewTopic customTopic() {
         return TopicBuilder
-                .name(testTopic)
+                .name(customTopic)
                 .build();
     }
 

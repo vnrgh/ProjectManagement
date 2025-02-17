@@ -24,7 +24,7 @@ public class UserRequestDTO {
     @NotBlank
     private String password;
     @NotBlank
-    @Email
-    @UniqueEmail
+//    @Email
+//    @UniqueEmail
     private String email;
 }

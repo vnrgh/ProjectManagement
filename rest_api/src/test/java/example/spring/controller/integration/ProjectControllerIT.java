@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Testcontainers
 @ContextConfiguration(classes = TestContainerConfig.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class ProjectControllerIT {
+class ProjectControllerIT {
     @Autowired
     private ProjectRepository projectRepository;
 

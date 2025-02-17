@@ -19,12 +19,16 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TaskServiceUnitTest {
@@ -65,42 +69,42 @@ class TaskServiceUnitTest {
         Long taskId = 1L;
         Task task = new Task(taskId, "description", Difficulty.EASY, "tomorrow", project, List.of(employee1, employee2));
 
-        Mockito.when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1, employee2));
-        Mockito.when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
-        Mockito.when(taskRepository.save(Mockito.any(Task.class))).thenReturn(task);
+        when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1, employee2));
+        when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
+        when(taskRepository.save(Mockito.any(Task.class))).thenReturn(task);
 
         Long id = taskService.createTask(taskDTO);
 
         assertNotNull(id);
         assertEquals(1L, id);
 
-        Mockito.verify(taskRepository).save(Mockito.any(Task.class));
+        verify(taskRepository).save(Mockito.any(Task.class));
     }
 
     @Test
     void createTaskThrowsProjectNotFoundExceptionTest() {
         taskDTO.setProjectId(99L);
 
-        Mockito.when(projectRepository.findById(99L)).thenReturn(Optional.empty());
+        when(projectRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(ProjectNotFoundException.class, () -> taskService.createTask(taskDTO));
 
-        Mockito.verify(projectRepository, Mockito.times(1)).findById(99L);
-        Mockito.verify(employeeRepository, Mockito.never()).findAllById(Mockito.any());
-        Mockito.verify(taskRepository, Mockito.never()).save(Mockito.any());
+        verify(projectRepository, times(1)).findById(99L);
+        verify(employeeRepository, Mockito.never()).findAllById(Mockito.any());
+        verify(taskRepository, Mockito.never()).save(Mockito.any());
 
     }
 
     @Test
     void createTaskThrowsEmployeeNotFoundExceptionTest() {
-        Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
-        Mockito.when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1));
+        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
+        when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1));
 
         assertThrows(EmployeeNotFoundException.class, () -> taskService.createTask(taskDTO));
 
-        Mockito.verify(projectRepository, Mockito.times(1)).findById(1L);
-        Mockito.verify(employeeRepository, Mockito.times(1)).findAllById(taskDTO.getEmployeeIds());
-        Mockito.verify(taskRepository, Mockito.never()).save(Mockito.any());
+        verify(projectRepository, times(1)).findById(1L);
+        verify(employeeRepository, times(1)).findAllById(taskDTO.getEmployeeIds());
+        verify(taskRepository, Mockito.never()).save(Mockito.any());
     }
 
     @Test
@@ -108,25 +112,25 @@ class TaskServiceUnitTest {
         Long taskId = 1L;
         Task task = new Task(taskId, "description", Difficulty.EASY, "tomorrow", project, List.of(employee1, employee2));
 
-        Mockito.when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
 
         TaskDTO result = taskService.getTaskById(taskId);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
 
-        Mockito.verify(taskRepository).findById(taskId);
+        verify(taskRepository).findById(taskId);
     }
 
     @Test
     void getTaskByIdThrowsExceptionTest() {
         Long taskId = 99L;
 
-        Mockito.when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
+        when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
 
         assertThrows(TaskNotFoundException.class, () -> taskService.getTaskById(taskId));
 
-        Mockito.verify(taskRepository).findById(taskId);
+        verify(taskRepository).findById(taskId);
     }
 
     @Test
@@ -134,14 +138,14 @@ class TaskServiceUnitTest {
         List<Task> tasks = List.of(new Task(1L, "description1", Difficulty.EASY, "tomorrow1", project, List.of(employee1, employee2)),
                 new Task(2L, "description2", Difficulty.EASY, "tomorrow2", project, List.of(employee1, employee2)));
 
-        Mockito.when(taskRepository.findAll()).thenReturn(tasks);
+        when(taskRepository.findAll()).thenReturn(tasks);
 
         List<TaskDTO> result = taskService.getAllTasks();
 
         assertNotNull(result);
         assertEquals(2, result.size());
 
-        Mockito.verify(taskRepository).findAll();
+        verify(taskRepository).findAll();
     }
 
     @Test
@@ -149,70 +153,97 @@ class TaskServiceUnitTest {
         Long taskId = 1L;
         Task task = new Task(taskId, "blah blah blah", Difficulty.HARD, "now", project, List.of(employee1, employee2));
 
-        Mockito.when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1, employee2));
-        Mockito.when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
-        Mockito.when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
-        Mockito.when(taskRepository.save(Mockito.any(Task.class))).thenReturn(task);
+        when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1, employee2));
+        when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
+        when(taskRepository.save(Mockito.any(Task.class))).thenReturn(task);
 
-        taskService.updateTask(taskId, taskDTO);
+        taskService.updateTaskById(taskId, taskDTO);
 
         assertEquals(1L, task.getId());
         assertNotNull(task);
         assertEquals("description", task.getTaskDescription());
 
-        Mockito.verify(taskRepository).save(Mockito.any(Task.class));
+        verify(taskRepository).save(Mockito.any(Task.class));
     }
 
     @Test
     void updateTaskThrowsProjectNotFoundException() {
         Long taskId = 1L;
-        Mockito.when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
+        when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
 
-        assertThrows(ProjectNotFoundException.class, () -> taskService.updateTask(taskId, taskDTO));
+        assertThrows(ProjectNotFoundException.class, () -> taskService.updateTaskById(taskId, taskDTO));
 
-        Mockito.verify(projectRepository, Mockito.times(1)).findById(taskDTO.getProjectId());
-        Mockito.verify(employeeRepository, Mockito.never()).findAllById(Mockito.any());
-        Mockito.verify(taskRepository, Mockito.never()).findById(Mockito.any());
-        Mockito.verify(taskRepository, Mockito.never()).save(Mockito.any());
+        verify(projectRepository, times(1)).findById(taskDTO.getProjectId());
+        verify(employeeRepository, Mockito.never()).findAllById(Mockito.any());
+        verify(taskRepository, Mockito.never()).findById(Mockito.any());
+        verify(taskRepository, Mockito.never()).save(Mockito.any());
     }
 
     @Test
     void updateTaskThrowsEmployeeNotFoundException() {
         Long taskId = 1L;
 
-        Mockito.when(projectRepository.findById(taskDTO.getProjectId())).thenReturn(Optional.of(project));
-        Mockito.when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1));
+        when(projectRepository.findById(taskDTO.getProjectId())).thenReturn(Optional.of(project));
+        when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1));
 
-        assertThrows(EmployeeNotFoundException.class, () -> taskService.updateTask(taskId, taskDTO));
+        assertThrows(EmployeeNotFoundException.class, () -> taskService.updateTaskById(taskId, taskDTO));
 
-        Mockito.verify(projectRepository, Mockito.times(1)).findById(taskDTO.getProjectId());
-        Mockito.verify(employeeRepository, Mockito.times(1)).findAllById(taskDTO.getEmployeeIds());
-        Mockito.verify(taskRepository, Mockito.never()).findById(Mockito.any());
-        Mockito.verify(taskRepository, Mockito.never()).save(Mockito.any());
+        verify(projectRepository, times(1)).findById(taskDTO.getProjectId());
+        verify(employeeRepository, times(1)).findAllById(taskDTO.getEmployeeIds());
+        verify(taskRepository, Mockito.never()).findById(Mockito.any());
+        verify(taskRepository, Mockito.never()).save(Mockito.any());
     }
 
     @Test
     void updateTaskThrowsTaskNotFoundException() {
         Long taskId = 1L;
 
-        Mockito.when(projectRepository.findById(taskDTO.getProjectId())).thenReturn(Optional.of(project));
-        Mockito.when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1, employee2));
-        Mockito.when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
+        when(projectRepository.findById(taskDTO.getProjectId())).thenReturn(Optional.of(project));
+        when(employeeRepository.findAllById(taskDTO.getEmployeeIds())).thenReturn(List.of(employee1, employee2));
+        when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
 
-        assertThrows(TaskNotFoundException.class, () -> taskService.updateTask(taskId, taskDTO));
+        assertThrows(TaskNotFoundException.class, () -> taskService.updateTaskById(taskId, taskDTO));
 
-        Mockito.verify(projectRepository, Mockito.times(1)).findById(taskDTO.getProjectId());
-        Mockito.verify(employeeRepository, Mockito.times(1)).findAllById(taskDTO.getEmployeeIds());
-        Mockito.verify(taskRepository, Mockito.times(1)).findById(taskId);
-        Mockito.verify(taskRepository, Mockito.never()).save(Mockito.any());
+        verify(projectRepository, times(1)).findById(taskDTO.getProjectId());
+        verify(employeeRepository, times(1)).findAllById(taskDTO.getEmployeeIds());
+        verify(taskRepository, times(1)).findById(taskId);
+        verify(taskRepository, Mockito.never()).save(Mockito.any());
     }
 
     @Test
-    void deleteEmployeeById() {
+    void deleteTaskById() {
         Long taskId = 1L;
+        Task task = new Task();
+        task.setId(taskId);
+        task.setEmployees(new ArrayList<>(List.of(employee1, employee2)));
 
-        taskService.deleteTask(taskId);
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
+        taskService.deleteTaskById(taskId);
 
-        Mockito.verify(taskRepository, Mockito.times(1)).deleteById(taskId);
+        assertTrue(task.getEmployees().isEmpty());
+        verify(taskRepository).save(task);
+        verify(taskRepository, times(1)).deleteById(taskId);
+    }
+
+    @Test
+    void deleteTaskByIdThrowsTaskNotFoundException() {
+        when(taskRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(TaskNotFoundException.class, () -> taskService.deleteTaskById(99L));
+        verify(taskRepository, never()).deleteById(anyLong());
+    }
+
+    @Test
+    void deleteTaskByIdThrowsEmployeeNotFoundException() {
+        Long taskId = 1L;
+        Task task = new Task();
+        task.setId(taskId);
+        task.setEmployees(Collections.emptyList());
+
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
+
+        assertThrows(EmployeeNotFoundException.class, () -> taskService.deleteTaskById(taskId));
+        verify(taskRepository, never()).deleteById(anyLong());
     }
 }

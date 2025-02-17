@@ -22,6 +22,8 @@ import java.util.Optional;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceUnitTest {
@@ -52,22 +54,22 @@ class EmployeeServiceUnitTest {
     void createEmployeeTest() {
         Employee employee = new Employee(1L, "John", "Doe", 20, 1000.0, Skill.JUNIOR, user);
 
-        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        Mockito.when(employeeRepository.save(Mockito.any(Employee.class))).thenReturn(employee);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
 
         Long result = employeeService.createEmployee(employeeDTO);
 
         assertNotNull(result);
         assertEquals(1L, result);
 
-        Mockito.verify(employeeRepository).save(Mockito.any(Employee.class));
+        verify(employeeRepository).save(any(Employee.class));
     }
 
     @Test
     void getEmployeeByIdTest() {
         Employee employee = new Employee(employeeId, "John", "Doe", 20, 1000.0, Skill.JUNIOR, null);
 
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
 
         Employee result = employeeService.getEmployeeById(employeeId);
 
@@ -75,16 +77,16 @@ class EmployeeServiceUnitTest {
         assertEquals(1L, result.getId());
         assertEquals("John", result.getFirstName());
 
-        Mockito.verify(employeeRepository).findById(employeeId);
+        verify(employeeRepository).findById(employeeId);
     }
 
     @Test
     void getEmployeeByIdThrowsExceptionTest() {
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
 
         assertThrows(EmployeeNotFoundException.class, () -> employeeService.getEmployeeById(employeeId));
 
-        Mockito.verify(employeeRepository).findById(employeeId);
+        verify(employeeRepository).findById(employeeId);
     }
 
     @Test
@@ -93,7 +95,7 @@ class EmployeeServiceUnitTest {
                 new Employee(1L, "John1", "Doe1", 20, 1000.0, Skill.JUNIOR, null),
                 new Employee(2L, "John2", "Doe2", 20, 9999.9, Skill.SENIOR, null)
         );
-        Mockito.when(employeeRepository.findAll()).thenReturn(employees);
+        when(employeeRepository.findAll()).thenReturn(employees);
 
         List<Employee> result = employeeService.getAllEmployees();
 
@@ -101,15 +103,15 @@ class EmployeeServiceUnitTest {
         assertEquals(1L, result.get(0).getId());
         assertEquals(2L, result.get(1).getId());
 
-        Mockito.verify(employeeRepository).findAll();
+        verify(employeeRepository).findAll();
     }
 
     @Test
     void updateEmployeeTest() {
         Employee employee = new Employee(employeeId, "Elon", "Doe", 20, 9999.9, Skill.SENIOR, null);
 
-        Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
-        Mockito.when(employeeRepository.save(Mockito.any(Employee.class))).thenReturn(employee);
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
 
         employeeService.updateEmployeeById(employeeId, employeeDTO);
 
@@ -117,26 +119,26 @@ class EmployeeServiceUnitTest {
         assertEquals(1L, employee.getId());
         assertEquals("John", employee.getFirstName());
 
-        Mockito.verify(employeeRepository).save(Mockito.any(Employee.class));
+        verify(employeeRepository).save(any(Employee.class));
     }
 
     @Test
     void deleteEmployeeTest() {
-        Mockito.when(taskRepository.existsByEmployeesId(employeeId)).thenReturn(false);
+        when(taskRepository.existsByEmployeesId(employeeId)).thenReturn(false);
 
         employeeService.deleteEmployeeById(employeeId, userId);
 
-        Mockito.verify(userRepository, Mockito.times(1)).deleteById(userId);
-        Mockito.verify(employeeRepository, Mockito.times(1)).deleteById(employeeId);
+        verify(userRepository, times(1)).deleteById(userId);
+        verify(employeeRepository, times(1)).deleteById(employeeId);
     }
 
     @Test
     void deleteEmployeeThrowsExceptionTest() {
-       Mockito.when(taskRepository.existsByEmployeesId(employeeId)).thenReturn(true);
+       when(taskRepository.existsByEmployeesId(employeeId)).thenReturn(true);
 
        assertThrows(IllegalStateException.class, () -> employeeService.deleteEmployeeById(employeeId, userId));
 
-       Mockito.verify(userRepository, Mockito.never()).deleteById(Mockito.anyLong());
-       Mockito.verify(employeeRepository, Mockito.never()).deleteById(Mockito.anyLong());
+       verify(userRepository, never()).deleteById(Mockito.anyLong());
+       verify(employeeRepository, Mockito.never()).deleteById(Mockito.anyLong());
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -28,7 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Testcontainers
 @ContextConfiguration(classes = TestContainerConfig.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class EmployeeControllerIT {
+@ActiveProfiles("test")
+class EmployeeControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -47,11 +49,12 @@ public class EmployeeControllerIT {
     @BeforeEach
     void setUp() {
         user = new User(1L, "username", "password", "test@example.com", null, null);
+        user =userRepository.save(user);
     }
 
     @Test
     void createEmployee() throws Exception {
-        EmployeeDTO employeeDTO = new EmployeeDTO("John", "Doe", 20, 1000.0, Skill.JUNIOR, 1L);
+        EmployeeDTO employeeDTO = new EmployeeDTO("John", "Doe", 20, 1000.0, Skill.JUNIOR, user.getId());
 
         mockMvc.perform(post("/api/employee")
                         .contentType(MediaType.APPLICATION_JSON)

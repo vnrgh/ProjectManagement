@@ -26,15 +26,14 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    private ResponseEntity<Long> signup(@Valid @RequestBody UserRequestDTO userDTO) {
-        Long id = authService.signUp(userDTO);
+    public ResponseEntity<Long> signup(@Valid @RequestBody UserRequestDTO userDTO) {
         String welcomeMessage = "Welcome, " + userDTO.getUsername() + "!";
-        messageProducer.sendMessage("welcomeMailTopic", userDTO.getEmail() + ";" + welcomeMessage);
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        messageProducer.sendStringMessage("welcomeMailTopic", userDTO.getEmail() + ";" + welcomeMessage);
+        return new ResponseEntity<>(authService.signUp(userDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")
-    private ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInRequestDTO requestDTO) {
+    public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInRequestDTO requestDTO) {
         return new ResponseEntity<>(authService.signIn(requestDTO), HttpStatus.OK);
     }
 }

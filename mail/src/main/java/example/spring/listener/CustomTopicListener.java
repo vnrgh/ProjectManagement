@@ -20,7 +20,8 @@ public class TestTopicListener {
             topics = "testTopic"
     )
     public void listener(String data) {
-        logger.info("Listener received: " + data);
+        logger.info("Listener received: {}", data);
         mailSender.sendMail("myowndn@gmail.com", data);
     }
+    //delete my mail everywhere
 }

@@ -3,16 +3,15 @@ package example.spring.service;
 import example.spring.exception.EmployeeNotFoundException;
 import example.spring.exception.UserNotFoundException;
 import example.spring.model.Employee;
-import example.spring.model.Task;
 import example.spring.model.User;
 import example.spring.model.dto.EmployeeDTO;
 import example.spring.repository.EmployeeRepository;
 import example.spring.repository.TaskRepository;
 import example.spring.repository.UserRepository;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -31,6 +30,10 @@ public class EmployeeService {
         User user = userRepository.findById(employeeDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User with id " + employeeDTO.getUserId() + " not found"));
 
+        if (user.getEmployee() != null) {
+            throw new BadCredentialsException("Invalid user id");
+        }
+
         Employee employee = Employee.builder()
                 .firstName(employeeDTO.getFirstName())
                 .lastName(employeeDTO.getLastName())
@@ -47,7 +50,6 @@ public class EmployeeService {
 
         return employee.getId();
     }
-
 
     public Employee getEmployeeById(Long id) {
         return employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee with id " + id + " not found"));
