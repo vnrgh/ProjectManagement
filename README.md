@@ -14,7 +14,6 @@ This project is designed for managing tasks and projects within a team. It allow
 
 ## Installation and Running
 
----
 
 ### Local Setup
 1. Ensure you have **Java 21** and **Docker** installed.
@@ -51,7 +50,6 @@ This project is designed for managing tasks and projects within a team. It allow
 
 ## Authentication
 
----
 
 To use the application, you need to sign in as an admin:
 1. Send a POST request to `localhost:8080/auth/signin` with the following JSON body:
@@ -68,7 +66,6 @@ To use the application, you need to sign in as an admin:
 
 ## API
 
----
 
 ### Example Requests
 **Create a new project:**
@@ -90,7 +87,6 @@ Authorization: Bearer <your_token>
 
 ## Testing
 
----
 
 To run tests, use the following command:
 ```sh
@@ -100,7 +96,6 @@ Tests use **Testcontainers** for PostgreSQL, **EmbeddedKafka** for Kafka and **U
 
 ## Contact
 
----
 
 Project author: [vnrgh](https://github.com/vnrgh)
 
