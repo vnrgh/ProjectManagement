@@ -36,9 +36,9 @@
 //@Testcontainers
 //@ExtendWith(SpringExtension.class)
 //@SpringBootTest
-////        (properties =
-////                {"spring.kafka.bootstrap-servers=",
-////                        "spring.kafka.consumer.bootstrap-servers="})
+//        (properties =
+//                {"spring.kafka.bootstrap-servers=",
+//                        "spring.kafka.consumer.bootstrap-servers="})
 //@ActiveProfiles("test")
 //class MessageProducerIntegrationTest {
 //    private static final KafkaContainer kafkaContainer =
@@ -76,7 +76,7 @@
 //        String topic = "test-topic";
 //        String message = "Hello, Kafka!";
 //
-//        messageProducer.sendMessage(topic, message);
+//        messageProducer.sendStringMessage(topic, message);
 //
 //        Properties props = new Properties();
 //        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers());

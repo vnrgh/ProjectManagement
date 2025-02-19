@@ -13,6 +13,9 @@ This project is designed for managing tasks and projects within a team. It allow
 - Testcontainers
 
 ## Installation and Running
+
+---
+
 ### Local Setup
 1. Ensure you have **Java 21** and **Docker** installed.
 2. Clone the repository:
@@ -20,24 +23,36 @@ This project is designed for managing tasks and projects within a team. It allow
    git clone https://github.com/vnrgh/ProjectManagement
    cd ProjectManagement
    ```
-3. Set the required environment variables:
-   ```sh
-   export DATABASE_URL=<your_database_url>
-   export USERNAME=<your_db_username>
-   export PASSWORD=<your_db_password>
-   export SECRET=<your_secret_key>
-   export EXPIRE_TIME=<token_expiration_time>
+3. Set email and application passwords in the **mail/src/main/resources/application.properties**:
+   ```properties
+   spring.mail.username=your_mail
+   spring.mail.password=your_password
    ```
-4. Start database containers:
+
+4. Set the required environment variables:
    ```sh
-   docker-compose up -d
+   export DATABASE_URL=<your_database_url> #database connection url
+   export USERNAME=<your_db_username> #database username
+   export PASSWORD=<your_db_password> #database password
+   export SECRET=<your_secret_key> #secret for jwt token
+   export EXPIRE_TIME=<token_expiration_time> # jwt token expire time
    ```
-5. Build and run the project:
+5. Start database containers:
+   ```sh
+   docker-compose up --build
+   ```
+6. Build and run the project:
    ```sh
    ./mvnw spring-boot:run
    ```
+   Swagger UI - http://localhost:8080/swagger-ui.html
+   
+   SonarQube - http://localhost:9000
 
 ## Authentication
+
+---
+
 To use the application, you need to sign in as an admin:
 1. Send a POST request to `localhost:8080/auth/signin` with the following JSON body:
    ```json
@@ -52,6 +67,9 @@ To use the application, you need to sign in as an admin:
    ```
 
 ## API
+
+---
+
 ### Example Requests
 **Create a new project:**
 ```http
@@ -71,12 +89,18 @@ Authorization: Bearer <your_token>
 ```
 
 ## Testing
+
+---
+
 To run tests, use the following command:
 ```sh
 ./mvnw test
 ```
-Tests use **Testcontainers** for PostgreSQL.
+Tests use **Testcontainers** for PostgreSQL, **EmbeddedKafka** for Kafka and **Unit tests** for required classes.
 
 ## Contact
+
+---
+
 Project author: [vnrgh](https://github.com/vnrgh)
 
