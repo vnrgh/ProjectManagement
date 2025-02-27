@@ -19,7 +19,7 @@ public class CustomTopicListener {
     }
 
     @KafkaListener(
-            topics = "customTopic"
+            topics = "${spring.kafka.topic.customTopic}", groupId = "${spring.kafka.consumer.group-id}"
     )
     public void listener(@Payload NotificationEvent event) {
         logger.info("Received a message contains a notification information with receiver {} and message: {}",

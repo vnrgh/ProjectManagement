@@ -17,7 +17,10 @@ public class WelcomeMailTopicListener {
     }
 
     @KafkaListener(
-            topics = "welcomeMailTopic"
+            topics = "${spring.kafka.topic.welcomeMailTopic}",
+            groupId = "${spring.kafka.consumer.group-id}",
+            properties = {"spring.json.value.default.type=java.lang.String"}
+//            spring.kafka.consumer.properties.spring.json.value.default.type
     )
     public void listener(String data) {
         logger.info("Listener received: {}", data);
