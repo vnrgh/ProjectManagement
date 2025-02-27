@@ -27,6 +27,6 @@ public class Project {
     @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<Task> tasks; // Связь с Task nullable на момент создания project
+    private List<Task> tasks;
 }
 

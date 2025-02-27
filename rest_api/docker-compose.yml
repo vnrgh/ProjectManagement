@@ -16,8 +16,7 @@ services:
     build: .
     container_name: project-management-api
     environment:
-#      DATABASE_URL: jdbc:postgresql://postgres:5432/postgres
-      DATABASE_URL: jdbc:postgresql://host.docker.internal:5432/postgres
+      DATABASE_URL: jdbc:postgresql://host.docker.internal:5432/postgres #runs database locally
       USERNAME: postgres
       PASSWORD: postgres
       SECRET: secret

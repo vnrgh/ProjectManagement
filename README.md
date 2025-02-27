@@ -18,38 +18,30 @@ This project is designed for managing tasks and projects within a team. It allow
 
 
 ### Local Setup
-1. Ensure you have **Java 21** and **Docker** installed.
-2. Clone the repository:
-   ```sh
-   git clone https://github.com/vnrgh/ProjectManagement
-   cd ProjectManagement
-   ```
-3. Set email and application passwords in **mail/src/main/resources/application.properties**:
+1. Ensure you have **Java 21**, **PostgreSQL** and **Docker** installed.
+
+2. Set email and password in **mail/src/main/resources/application.properties**:
    ```properties
    spring.mail.username=your_mail
    spring.mail.password=your_password
    ```
-4. Set secret and expire time for your jwt token in **src/main/resources/application.properties**
+3. Set secret and expire time for your jwt token in **src/main/resources/application.properties**
    ```properties
    jwt.token.secret=your_secret
    jwt.token.expireTime=your_expire_time
    ```
 
-5. Set the required environment variables:
-   ```sh
-   export DATABASE_URL=<your_database_url> #database connection url
-   export USERNAME=<your_db_username> #database username
-   export PASSWORD=<your_db_password> #database password
-   ```
+4. Set the required environment variables:
    
-6. mvn clean install
-6. Start containers:
-   ```sh
-   docker-compose up --build
-   ```
+   ```DATABASE_URL``` - database connection url
+
+   ```USERNAME``` - database username
+
+   ```PASSWORD``` - database password
+
 
    Swagger UI - http://localhost:8080/swagger-ui.html
-
+   
    SonarQube - http://localhost:9000
 
 ## Authentication
@@ -73,30 +65,32 @@ To use the application, you need to sign in as an admin:
 
 ### Example Requests
 **Create a new project:**
-```http
-POST /api/projects
-Content-Type: application/json
-Authorization: Bearer <your_token>
-{
-  "projectName": "New Project",
-  "projectDescription": "Project description"
-}
-```
+   ```http
+   POST /api/projects
+   Content-Type: application/json
+   Authorization: Bearer <your_token>
+   {
+     "projectName": "New Project",
+     "projectDescription": "Project description"
+   }
+   ```
 
 **Retrieve all tasks:**
-```http
-GET /api/tasks
-Authorization: Bearer <your_token>
-```
+   ```http
+   GET /api/tasks
+   Authorization: Bearer <your_token>
+   ```
+
+Full list of endpoints is available at **Swagger UI**.
 
 ## Testing
 
 
 To run tests, use the following command:
-```sh
-./mvnw test
-```
-Tests use **Testcontainers** for PostgreSQL, **EmbeddedKafka** for Kafka and **JUnit** for unit testing.
+   ```sh
+  mvn test
+   ```
+Tests use **Testcontainers**, **EmbeddedKafka** and **JUnit**.
 
 ## Contact
 
