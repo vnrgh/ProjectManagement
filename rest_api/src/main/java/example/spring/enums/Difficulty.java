@@ -2,6 +2,6 @@ package example.spring.enums;
 
 public enum Difficulty {
     EASY,
-    MIDDLE,
+    MEDIUM,
     HARD
 }

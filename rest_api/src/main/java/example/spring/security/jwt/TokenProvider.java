@@ -19,14 +19,9 @@ import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider {
-//    @Value("${jwt.token.secret}")
-//    private String secret;
-//    @Value("${jwt.token.expireTime}")
-//    private long expireTime;
-
-    @Value("secret")
+    @Value("${jwt.token.secret}")
     private String secret;
-    @Value("600000")
+    @Value("${jwt.token.expireTime}")
     private long expireTime;
 
     public String createToken(Authentication authenticate) {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class WelcomeMailTopicListener {
 
-    Logger logger = LoggerFactory.getLogger(WelcomeMailTopicListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WelcomeMailTopicListener.class);
     private final CustomMailSender mailSender;
 
     public WelcomeMailTopicListener(CustomMailSender mailSender) {
@@ -20,14 +20,13 @@ public class WelcomeMailTopicListener {
             topics = "${spring.kafka.topic.welcomeMailTopic}",
             groupId = "${spring.kafka.consumer.group-id}",
             properties = {"spring.json.value.default.type=java.lang.String"}
-//            spring.kafka.consumer.properties.spring.json.value.default.type
     )
     public void listener(String data) {
-        logger.info("Listener received: {}", data);
+        LOGGER.info("Listener received: {}", data);
 
         String[] parts = data.split(";", 2);
         if (parts.length < 2) {
-            logger.error("Invalid message format: {}", data);
+            LOGGER.error("Invalid message format: {}", data);
             return;
         }
 

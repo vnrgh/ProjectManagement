@@ -5,7 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <!-- Данные для roles -->
     <changeSet id="1" author="your_name">
         <insert tableName="roles">
             <column name="name" value="ADMIN"/>
@@ -15,7 +14,6 @@
         </insert>
     </changeSet>
 
-    <!-- Данные для employees-->
     <changeSet id="2" author="your_name">
         <insert tableName="employees">
             <column name="first_name" value="John"/>
@@ -26,7 +24,6 @@
         </insert>
     </changeSet>
 
-    <!-- Данные для users -->
     <changeSet id="3" author="your_name">
         <insert tableName="users">
             <column name="username" value="admin"/>
@@ -36,7 +33,6 @@
         </insert>
     </changeSet>
 
-    <!-- Данные для user_roles -->
     <changeSet id="4" author="your_name">
         <insert tableName="user_roles">
             <column name="user_id" valueNumeric="1"/>
@@ -44,7 +40,6 @@
         </insert>
     </changeSet>
 
-    <!-- Данные для projects -->
     <changeSet id="5" author="your_name">
         <insert tableName="projects">
             <column name="project_name" value="Project A"/>
@@ -52,7 +47,6 @@
         </insert>
     </changeSet>
 
-    <!-- Данные для tasks -->
     <changeSet id="6" author="your_name">
         <insert tableName="tasks">
             <column name="task_description" value="Task 1"/>
@@ -62,15 +56,10 @@
         </insert>
     </changeSet>
 
-
-
-    <!-- Данные для employee_tasks -->
     <changeSet id="7" author="your_name">
         <insert tableName="employee_tasks">
             <column name="task_id" valueNumeric="1"/>
             <column name="employee_id" valueNumeric="1"/>
         </insert>
     </changeSet>
-
-
 </databaseChangeLog>

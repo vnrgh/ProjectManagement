@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomTopicListener {
 
-    Logger logger = LoggerFactory.getLogger(CustomTopicListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomTopicListener.class);
     private final CustomMailSender mailSender;
 
     public CustomTopicListener(CustomMailSender mailSender) {
@@ -22,7 +22,7 @@ public class CustomTopicListener {
             topics = "${spring.kafka.topic.customTopic}", groupId = "${spring.kafka.consumer.group-id}"
     )
     public void listener(@Payload NotificationEvent event) {
-        logger.info("Received a message contains a notification information with receiver {} and message: {}",
+        LOGGER.info("Received a message contains a notification information with receiver {} and message: {}",
                 event.getNotificationReceiver(), event.getMessage());
         mailSender.sendMail(event.getNotificationReceiver(), event.getMessage());
     }

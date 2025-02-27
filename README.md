@@ -11,6 +11,9 @@ This project is designed for managing tasks and projects within a team. It allow
 - Apache Kafka
 - Docker
 - Testcontainers
+- JUnit
+- SonarQube
+- Jenkins
 
 ## Installation and Running
 
@@ -22,28 +25,28 @@ This project is designed for managing tasks and projects within a team. It allow
    git clone https://github.com/vnrgh/ProjectManagement
    cd ProjectManagement
    ```
-3. Set email and application passwords in the **mail/src/main/resources/application.properties**:
+3. Set email and application passwords in **mail/src/main/resources/application.properties**:
    ```properties
    spring.mail.username=your_mail
    spring.mail.password=your_password
    ```
+4. Set secret and expire time for your jwt token in **src/main/resources/application.properties**
+   ```properties
+   jwt.token.secret=your_secret
+   jwt.token.expireTime=your_expire_time
+   ```
 
-4. Set the required environment variables:
+5. Set the required environment variables:
    ```sh
    export DATABASE_URL=<your_database_url> #database connection url
    export USERNAME=<your_db_username> #database username
    export PASSWORD=<your_db_password> #database password
-   export SECRET=<your_secret_key> #secret for jwt token
-   export EXPIRE_TIME=<token_expiration_time> # jwt token expire time
    ```
-5. Start database containers:
+6. Start containers:
    ```sh
    docker-compose up --build
    ```
-6. Build and run the project:
-   ```sh
-   ./mvnw spring-boot:run
-   ```
+
    Swagger UI - http://localhost:8080/swagger-ui.html
    
    SonarQube - http://localhost:9000
@@ -92,7 +95,7 @@ To run tests, use the following command:
 ```sh
 ./mvnw test
 ```
-Tests use **Testcontainers** for PostgreSQL, **EmbeddedKafka** for Kafka and **Unit tests** for required classes.
+Tests use **Testcontainers** for PostgreSQL, **EmbeddedKafka** for Kafka and **JUnit** for unit testing.
 
 ## Contact
 

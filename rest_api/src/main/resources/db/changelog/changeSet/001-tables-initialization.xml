@@ -5,7 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <!-- Таблица roles -->
     <changeSet id="1" author="your_name">
         <createTable tableName="roles">
             <column name="role_id" type="BIGINT" autoIncrement="true">
@@ -17,7 +16,6 @@
         </createTable>
     </changeSet>
 
-    <!-- Таблица employees -->
     <changeSet id="2" author="your_name">
         <createTable tableName="employees">
             <column name="employee_id" type="BIGINT" autoIncrement="true">
@@ -35,7 +33,6 @@
         </createTable>
     </changeSet>
 
-    <!-- Таблица users -->
     <changeSet id="3" author="your_name">
         <createTable tableName="users">
             <column name="user_id" type="BIGINT" autoIncrement="true">
@@ -62,7 +59,6 @@
                                  constraintName="fk_users_employees"/>
     </changeSet>
 
-    <!-- Таблица user_roles -->
     <changeSet id="4" author="your_name">
         <createTable tableName="user_roles">
             <column name="user_id" type="BIGINT">
@@ -84,7 +80,6 @@
                                  constraintName="fk_user_roles_role"/>
     </changeSet>
 
-    <!-- Таблица projects -->
     <changeSet id="5" author="your_name">
         <createTable tableName="projects">
             <column name="project_id" type="BIGINT" autoIncrement="true">
@@ -97,7 +92,6 @@
         </createTable>
     </changeSet>
 
-    <!-- Таблица tasks -->
     <changeSet id="6" author="your_name">
         <createTable tableName="tasks">
             <column name="task_id" type="BIGINT" autoIncrement="true">
@@ -119,7 +113,6 @@
                                  constraintName="fk_tasks_projects"/>
     </changeSet>
 
-<!--     Таблица employee_tasks -->
     <changeSet id="7" author="your_name">
         <createTable tableName="employee_tasks">
             <column name="task_id" type="BIGINT">
