@@ -41,6 +41,8 @@ This project is designed for managing tasks and projects within a team. It allow
    export USERNAME=<your_db_username> #database username
    export PASSWORD=<your_db_password> #database password
    ```
+   
+6. mvn clean install
 6. Start containers:
    ```sh
    docker-compose up --build
