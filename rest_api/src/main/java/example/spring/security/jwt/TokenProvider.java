@@ -52,12 +52,4 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
-
-    private void authHeaderCheck(String authHeader) {
-        if (Objects.isNull(authHeader)) {
-            throw new JwtTokenException("TOKEN_NOT_FOUND");
-        } else if (!authHeader.startsWith("Bearer ")) {
-            throw new JwtTokenException("TOKEN_DECLARATION_IS_WRONG");
-        }
-    }
 }

@@ -30,7 +30,7 @@ public class CustomFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
             time = System.currentTimeMillis() - time;
-            LOGGER.info("Request was processed in " + ((HttpServletRequest) servletRequest).getRequestURI() + " in " + time + " ms");
+            LOGGER.info("Request was processed in {} in {} ms", ((HttpServletRequest) servletRequest).getRequestURI(), time);
         }
     }
 
