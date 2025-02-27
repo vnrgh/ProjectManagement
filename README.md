@@ -13,7 +13,6 @@ This project is designed for managing tasks and projects within a team. It allow
 - Testcontainers
 - JUnit
 - SonarQube
-- Jenkins
 
 ## Installation and Running
 
@@ -48,7 +47,7 @@ This project is designed for managing tasks and projects within a team. It allow
    ```
 
    Swagger UI - http://localhost:8080/swagger-ui.html
-   
+
    SonarQube - http://localhost:9000
 
 ## Authentication
