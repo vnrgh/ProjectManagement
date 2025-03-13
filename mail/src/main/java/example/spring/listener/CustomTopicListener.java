@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomTopicListener {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomTopicListener.class);
+
     private final CustomMailSender mailSender;
 
     public CustomTopicListener(CustomMailSender mailSender) {

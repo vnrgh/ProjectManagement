@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(LoggerProperties.class)
 @ConditionalOnProperty(prefix = "example.logger", name = "enabled", havingValue = "true")
 public class LoggerAutoConfiguration {
-
     @Bean
     public LoggableAspect loggableAspect() {
         return new LoggableAspect();
